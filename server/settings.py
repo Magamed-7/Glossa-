@@ -255,6 +255,20 @@ LOGGING = {
             'formatter': 'verbose',
         },
     },
+    'handlers': {
+        'notifications_info': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'notifications.log'),
+            'formatter': 'verbose',
+        },
+        'notifications_error': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'notifications_errors.log'),
+            'formatter': 'verbose',
+        },
+    },
 
     'loggers': {
         'learning': {
@@ -264,6 +278,14 @@ LOGGING = {
         },
         'duels': {
             'handlers': ['duels_info', 'duels_error'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+    'loggers': {
+
+        'notifications': {
+            'handlers': ['notifications_info', 'notifications_error'],
             'level': 'INFO',
             'propagate': False,
         },
