@@ -1,0 +1,46 @@
+# Окружение
+.env
+.env.*
+.venv
+
+
+# База данных
+db.sqlite3
+*.db
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Django
+/static/
+/media/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Coverage / тесты
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Build
+dist/
+build/
+*.egg-info/
