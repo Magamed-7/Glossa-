@@ -20,7 +20,7 @@ class Plan(models.Model):
 
     # Limits
     stories_per_day = models.PositiveIntegerField(default=3)
-    max_phrases = models.PositiveIntegerField(default=50)
+    phrases_per_day = models.PositiveIntegerField(default=50)
     ai_access = models.BooleanField(default=False)
     rated_duels_access = models.BooleanField(default=False)
     full_analytics = models.BooleanField(default=False)
