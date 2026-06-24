@@ -68,7 +68,7 @@ def _make_request(user, request_type, prompt, cache_key=None):
             error_message=str(e),
             response_time_ms=elapsed,
         )
-        logger.error(f'Ошибка AI запроса {request_type}: {e}')
+        logger.error(f'Ошибка AI запроса {request_type}: {e}', exc_info=True)
         return None
 
 

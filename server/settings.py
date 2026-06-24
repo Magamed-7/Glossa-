@@ -268,15 +268,27 @@ LOGGING = {
             'formatter': 'verbose',
         },
         'reminders_info': {
-        'level': 'INFO',
-        'class': 'logging.FileHandler',
-        'filename': os.path.join(BASE_DIR, 'logs', 'reminders.log'),
-        'formatter': 'verbose',
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'reminders.log'),
+            'formatter': 'verbose',
         },
         'reminders_error': {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
             'filename': os.path.join(BASE_DIR, 'logs', 'reminders_errors.log'),
+            'formatter': 'verbose',
+        },
+        'ai_info': {
+        'level': 'INFO',
+        'class': 'logging.FileHandler',
+        'filename': os.path.join(BASE_DIR, 'logs', 'ai.log'),
+        'formatter': 'verbose',
+        },
+        'ai_error': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'ai_errors.log'),
             'formatter': 'verbose',
         },
     },
@@ -302,6 +314,11 @@ LOGGING = {
         'handlers': ['reminders_info', 'reminders_error'],
         'level': 'INFO',
         'propagate': False,
+        },
+        'ai': {
+            'handlers': ['ai_info', 'ai_error'],
+            'level': 'INFO',
+            'propagate': False,
         },
     },
 }
