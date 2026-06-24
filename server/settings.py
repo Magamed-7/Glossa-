@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'django_filters',
+    'channels',
+    'corsheaders'
 
 
     'ai.apps.AiConfig',
@@ -239,6 +241,18 @@ LOGGING = {
             'filename': os.path.join(BASE_DIR, 'logs', 'learning_errors.log'),
             'formatter': 'verbose',
         },
+        'duels_info': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'duels.log'),
+            'formatter': 'verbose',
+        },
+        'duels_error': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'duels_errors.log'),
+            'formatter': 'verbose',
+        },
     },
 
     'loggers': {
@@ -246,6 +260,20 @@ LOGGING = {
             'handlers': ['learning_info', 'learning_error'],
             'level': 'INFO',
             'propagate': False,
+        },
+        'duels': {
+            'handlers': ['duels_info', 'duels_error'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/0')],
         },
     },
 }
