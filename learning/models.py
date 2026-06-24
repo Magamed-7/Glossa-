@@ -97,13 +97,6 @@ class ReviewSession(models.Model):
         return f'{self.phrase.word} — след. повторение: {self.next_review_at.date()}'
 
     def apply_sm2(self, quality: int):
-        """
-        quality: 0-5
-        0-1 — не помню (again)
-        2-3 — сложно (hard)
-        4   — хорошо (good)
-        5   — легко (easy)
-        """
         if quality < 3:
             self.repetitions = 0
             self.interval_days = 1

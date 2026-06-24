@@ -39,6 +39,7 @@ celerybeat.pid
 .coverage
 htmlcov/
 .pytest_cache/
+logs/*.log
 
 # Build
 dist/

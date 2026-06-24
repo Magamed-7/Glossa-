@@ -210,3 +210,42 @@ CACHES = {
     }
 }
 
+
+
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'verbose': {
+            'format': '[{asctime}] [{levelname}] {name} — {message}',
+            'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        },
+    },
+
+    'handlers': {
+        'learning_info': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'learning.log'),
+            'formatter': 'verbose',
+        },
+        'learning_error': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'learning_errors.log'),
+            'formatter': 'verbose',
+        },
+    },
+
+    'loggers': {
+        'learning': {
+            'handlers': ['learning_info', 'learning_error'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
