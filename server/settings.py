@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+from celery.schedules import crontab
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -254,8 +255,6 @@ LOGGING = {
             'filename': os.path.join(BASE_DIR, 'logs', 'duels_errors.log'),
             'formatter': 'verbose',
         },
-    },
-    'handlers': {
         'notifications_info': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
@@ -268,9 +267,27 @@ LOGGING = {
             'filename': os.path.join(BASE_DIR, 'logs', 'notifications_errors.log'),
             'formatter': 'verbose',
         },
+        'reminders_info': {
+        'level': 'INFO',
+        'class': 'logging.FileHandler',
+        'filename': os.path.join(BASE_DIR, 'logs', 'reminders.log'),
+        'formatter': 'verbose',
+        },
+        'reminders_error': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'reminders_errors.log'),
+            'formatter': 'verbose',
+        },
     },
 
+    
     'loggers': {
+        'notifications': {
+            'handlers': ['notifications_info', 'notifications_error'],
+            'level': 'INFO',
+            'propagate': False,
+        },
         'learning': {
             'handlers': ['learning_info', 'learning_error'],
             'level': 'INFO',
@@ -281,13 +298,10 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False,
         },
-    },
-    'loggers': {
-
-        'notifications': {
-            'handlers': ['notifications_info', 'notifications_error'],
-            'level': 'INFO',
-            'propagate': False,
+        'reminders': {
+        'handlers': ['reminders_info', 'reminders_error'],
+        'level': 'INFO',
+        'propagate': False,
         },
     },
 }
@@ -307,3 +321,20 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
+
+
+
+CELERY_BEAT_SCHEDULE = {
+    'daily-review-reminders': {
+        'task': 'reminders.tasks.send_daily_review_reminders',
+        'schedule': crontab(hour=9, minute=0),
+    },
+    'inactivity-reminders': {
+        'task': 'reminders.tasks.send_inactivity_reminders',
+        'schedule': crontab(hour=10, minute=0),
+    },
+    'subscription-expiring-reminders': {
+        'task': 'reminders.tasks.send_subscription_expiring_reminders',
+        'schedule': crontab(hour=11, minute=0),
+    },
+}
