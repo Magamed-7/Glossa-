@@ -229,11 +229,12 @@ class DuelAdmin(admin.ModelAdmin):
     def is_active_badge(self, obj):
         if obj.is_active:
             return format_html(
-                '<span style="color:green;font-weight:bold;">🟢 Да</span>'
+                '<span style="color:green;font-weight:bold;">{}</span>',
+                '🟢 Да'
             )
-
         return format_html(
-            '<span style="color:red;font-weight:bold;">🔴 Нет</span>'
+            '<span style="color:red;font-weight:bold;">{}</span>',
+            '🔴 Нет'
         )
     
 

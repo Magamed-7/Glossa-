@@ -120,6 +120,10 @@ class ReminderScheduleAdmin(admin.ModelAdmin):
         "user__email",
     )
 
+    readonly_fields = (
+        "updated_at",  
+    )
+
     autocomplete_fields = ("user",)
 
     ordering = ("-updated_at",)

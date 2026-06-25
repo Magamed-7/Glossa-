@@ -88,6 +88,10 @@ class PlayerRatingAdmin(admin.ModelAdmin):
     def streak_badge(self, obj):
         return f"{obj.win_streak} / {obj.best_streak}"
     
+    @admin.display(description="📊 Win rate")
+    def win_rate_display(self, obj):
+        return f"{obj.win_rate}%"
+        
 
 
 
