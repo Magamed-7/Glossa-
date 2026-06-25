@@ -40,7 +40,7 @@ def update_ratings_on_duel_finish(sender, instance, created, **kwargs):
                     f'Рейтинг обновлён: {player.email} | изменение: {change:+d} | новый рейтинг: {rating.score}'
                 )
             except Exception as e:
-                logger.error(f'Ошибка обновления рейтинга для {player.email}: {e}')
+                logger.error(f'Ошибка обновления рейтинга для {player.email}: {e}', exc_info=True)
 
     except Exception as e:
-        logger.error(f'Критическая ошибка в update_ratings_on_duel_finish: {e}')
+        logger.error(f'Критическая ошибка в update_ratings_on_duel_finish: {e}', exc_info=True)

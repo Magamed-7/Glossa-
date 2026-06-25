@@ -23,7 +23,7 @@ def notify_due_reviews():
             try:
                 logger.info(f'Пользователь {user.email} — {count} слов к повторению')
             except Exception as e:
-                logger.error(f'Ошибка при обработке пользователя {user.email}: {e}')
+                logger.error(f'Ошибка при обработке пользователя {user.email}: {e}',exc_info=True)
 
     except Exception as e:
-        logger.error(f'Критическая ошибка в notify_due_reviews: {e}')
+        logger.error(f'Критическая ошибка в notify_due_reviews: {e}', exc_info=True)

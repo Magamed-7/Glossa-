@@ -34,4 +34,4 @@ def create_rating_history_on_change(sender, instance, created, **kwargs):
             f'{score_before} → {instance.score} ({change:+d})'
         )
     except Exception as e:
-        logger.error(f'Ошибка создания истории рейтинга для {instance.user.email}: {e}')
+        logger.error(f'Ошибка создания истории рейтинга для {instance.user.email}: {e}', exc_info=True)

@@ -27,7 +27,7 @@ class DuelConsumer(AsyncWebsocketConsumer):
             await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
             logger.info(f'WebSocket отключён: {self.user.email} | дуэль {self.duel_id} | код {close_code}')
         except Exception as e:
-            logger.error(f'Ошибка при отключении WebSocket {self.user.email}: {e}')
+            logger.error(f'Ошибка при отключении WebSocket {self.user.email}: {e}', exc_info=True)
 
     async def receive(self, text_data):
         try:
@@ -39,12 +39,12 @@ class DuelConsumer(AsyncWebsocketConsumer):
             elif action == 'player_ready':
                 await self.handle_ready(data)
             else:
-                logger.error(f'Неизвестный action от {self.user.email}: {action}')
+                logger.error(f'Неизвестный action от {self.user.email}: {action}',exc_info=True)
 
         except json.JSONDecodeError as e:
-            logger.error(f'Невалидный JSON от {self.user.email}: {e}')
+            logger.error(f'Невалидный JSON от {self.user.email}: {e}', exc_info=True)
         except Exception as e:
-            logger.error(f'Ошибка в receive от {self.user.email}: {e}')
+            logger.error(f'Ошибка в receive от {self.user.email}: {e}', exc_info=True)
 
     async def handle_answer(self, data):
         try:
@@ -66,7 +66,7 @@ class DuelConsumer(AsyncWebsocketConsumer):
             )
             logger.info(f'{self.user.email} ответил на раунд {round_id} | верно: {is_correct}')
         except Exception as e:
-            logger.error(f'Ошибка handle_answer от {self.user.email}: {e}')
+            logger.error(f'Ошибка handle_answer от {self.user.email}: {e}',exc_info=True)
 
     async def handle_ready(self, data):
         try:
@@ -79,13 +79,13 @@ class DuelConsumer(AsyncWebsocketConsumer):
                 }
             )
         except Exception as e:
-            logger.error(f'Ошибка handle_ready от {self.user.email}: {e}')
+            logger.error(f'Ошибка handle_ready от {self.user.email}: {e}', exc_info=True)
 
     async def duel_message(self, event):
         try:
             await self.send(text_data=json.dumps(event))
         except Exception as e:
-            logger.error(f'Ошибка отправки сообщения игроку {self.user.email}: {e}')
+            logger.error(f'Ошибка отправки сообщения игроку {self.user.email}: {e}', exc_info=True)
 
     @database_sync_to_async
     def save_answer(self, round_id, answer, elapsed_time):
@@ -110,5 +110,5 @@ class DuelConsumer(AsyncWebsocketConsumer):
             round_obj.save()
             return is_correct
         except Exception as e:
-            logger.error(f'Ошибка save_answer раунд {round_id}: {e}')
+            logger.error(f'Ошибка save_answer раунд {round_id}: {e}', exc_info=True)
             return False
