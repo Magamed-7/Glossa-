@@ -48,8 +48,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'django_filters',
-    'channels',
-    'corsheaders',
+    # 'channels',
+    # 'corsheaders',
 
 
     'ai.apps.AiConfig',
@@ -61,7 +61,7 @@ INSTALLED_APPS = [
     'ratings.apps.RatingsConfig',
     'reminders.apps.RemindersConfig',
     'stories.apps.StoriesConfig',
-    'Subscriptions.apps.SubscriptionsConfig',
+    'subscriptions.apps.SubscriptionsConfig',
     'users.apps.UsersConfig'
 ]
 

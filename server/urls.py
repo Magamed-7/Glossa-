@@ -9,17 +9,17 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('users/', include('users.urls')),
-    path('grammars/', include('grammar.urls')),
-    path('ai/', include('ai.urls')),
-    path('duels/', include('duels.urls')),
-    path('languages/', include('languages.urls')),
-    path('learnings/', include('learning.urls')),
-    path('notifications/', include('notifications.urls')),
-    path('ratings/', include('ratings.urls')),
-    path('reminders/', include('reminders.urls')),
-    path('stories/', include('stories.urls')),
-    path('subscriptions/', include('subscriptions.urls')),
+    # path('users/', include('users.urls')),
+    # path('grammars/', include('grammar.urls')),
+    # path('ai/', include('ai.urls')),
+    # path('duels/', include('duels.urls')),
+    # path('languages/', include('languages.urls')),
+    # path('learnings/', include('learning.urls')),
+    # path('notifications/', include('notifications.urls')),
+    # path('ratings/', include('ratings.urls')),
+    # path('reminders/', include('reminders.urls')),
+    # path('stories/', include('stories.urls')),
+    # path('subscriptions/', include('subscriptions.urls')),
 
 
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
