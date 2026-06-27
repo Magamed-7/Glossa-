@@ -304,3 +304,125 @@ class ChangePasswordView(APIView):
             {'detail': 'Пароль успешно изменён. Войдите заново.'},
             status=status.HTTP_200_OK,
         )
+    
+
+
+
+
+
+
+class MeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserProfileSerializer(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UpdateProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request):
+        profile, _ = Profile.objects.get_or_create(user=request.user)
+        serializer = ProfileSerializer(profile, data=request.data, partial=True)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        logger.info(f'Профиль обновлён: {request.user.email}')
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UpdateAccountView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request):
+        user = request.user
+        allowed_fields = ['email', 'phone', 'push_enabled', 'push_token']
+        data = {k: v for k, v in request.data.items() if k in allowed_fields}
+
+        new_email = data.get('email')
+        if new_email and new_email != user.email:
+            
+            if User.objects.filter(email=new_email).exclude(id=user.id).exists():
+                return Response(
+                    {'detail': 'Этот email уже используется.'},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            user.email = new_email
+            user.is_verified = False
+
+            
+            code = str(random.randint(100000, 999999))
+            EmailVerification.objects.create(
+                user=user,
+                code=code,
+                expires_at=timezone.now() + timedelta(minutes=10),
+            )
+            # TODO
+            logger.info(f'[DEV] Код верификации нового email {new_email}: {code}')
+
+        if 'phone' in data:
+            user.phone = data['phone']
+        if 'push_enabled' in data:
+            user.push_enabled = data['push_enabled']
+        if 'push_token' in data:
+            user.push_token = data['push_token']
+
+        user.save()
+        logger.info(f'Аккаунт обновлён: {user.email}')
+        return Response({'detail': 'Аккаунт обновлён.'}, status=status.HTTP_200_OK)
+
+
+class UserLanguageListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        languages = UserLanguage.objects.filter(user=request.user)
+        serializer = UserLanguageSerializer(languages, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = UserLanguageSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        language_code = serializer.validated_data['language_code']
+        if UserLanguage.objects.filter(user=request.user, language_code=language_code).exists():
+            return Response(
+                {'detail': 'Этот язык уже добавлен в ваш список.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        serializer.save(user=request.user)
+        logger.info(f'Добавлен язык {language_code} для: {request.user.email}')
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class UserLanguageDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def _get_language(self, request, pk):
+        try:
+            return UserLanguage.objects.get(id=pk, user=request.user)
+        except UserLanguage.DoesNotExist:
+            return None
+
+    def patch(self, request, pk):
+        language = self._get_language(request, pk)
+        if not language:
+            return Response({'detail': 'Язык не найден.'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = UserLanguageSerializer(language, data=request.data, partial=True)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def delete(self, request, pk):
+        language = self._get_language(request, pk)
+        if not language:
+            return Response({'detail': 'Язык не найден.'}, status=status.HTTP_404_NOT_FOUND)
+
+        language.delete()
+        logger.info(f'Язык {language.language_code} удалён для: {request.user.email}')
+        return Response(status=status.HTTP_204_NO_CONTENT)
