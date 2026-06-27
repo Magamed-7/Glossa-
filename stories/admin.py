@@ -22,6 +22,7 @@ class StoryAdmin(admin.ModelAdmin):
         "source_badge",
         "views_badge",
         "premium_badge",
+        "featured_badge",
         "created_at",
     )
 
@@ -31,12 +32,14 @@ class StoryAdmin(admin.ModelAdmin):
         "status",
         "source",
         "is_premium",
+        "is_featured",
     )
 
     search_fields = (
         "title",
         "content",
         "topic",
+        "tags",
     )
 
     autocomplete_fields = (
@@ -55,6 +58,7 @@ class StoryAdmin(admin.ModelAdmin):
                 "title",
                 "content",
                 "topic",
+                "tags",
             )
         }),
         ("🌍 Классификация", {
@@ -68,6 +72,7 @@ class StoryAdmin(admin.ModelAdmin):
             "fields": (
                 "source",
                 "is_premium",
+                "is_featured",
                 "read_time_minutes",
                 "views_count",
                 "created_by",
@@ -105,13 +110,14 @@ class StoryAdmin(admin.ModelAdmin):
     def status_badge(self, obj):
         colors = {
             "draft": "#f39c12",
+            "pending_review": "#e67e22",
             "published": "#27ae60",
+            "rejected": "#e74c3c",
             "archived": "#7f8c8d",
         }
-
         return format_html(
             '<b style="color:{};">{}</b>',
-            colors[obj.status],
+            colors.get(obj.status, "#000"),
             obj.get_status_display()
         )
 
@@ -120,7 +126,7 @@ class StoryAdmin(admin.ModelAdmin):
         icons = {
             "manual": "✍️",
             "ai_generated": "🤖",
-            "imported": "📥",
+            "ai_assisted": "🤖✨",
         }
         return f"{icons.get(obj.source, '')} {obj.get_source_display()}"
 
@@ -131,9 +137,10 @@ class StoryAdmin(admin.ModelAdmin):
     @admin.display(description="💎 Premium")
     def premium_badge(self, obj):
         return "💎 Да" if obj.is_premium else "—"
-    
 
-
+    @admin.display(description="⭐ Избранное")
+    def featured_badge(self, obj):
+        return "⭐ Да" if obj.is_featured else "—"
 
 
 @admin.register(StoryWord)
@@ -173,11 +180,7 @@ class StoryWordAdmin(admin.ModelAdmin):
             "conjunction": "➕",
             "other": "•",
         }
-
         return f"{icons.get(obj.part_of_speech, '')} {obj.get_part_of_speech_display()}"
-    
-
-
 
 
 @admin.register(UserStoryProgress)
