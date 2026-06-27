@@ -9,24 +9,23 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('users/', include('users.urls')),
-    # path('grammars/', include('grammar.urls')),
-    # path('ai/', include('ai.urls')),
-    # path('duels/', include('duels.urls')),
-    # path('languages/', include('languages.urls')),
-    # path('learnings/', include('learning.urls')),
-    # path('notifications/', include('notifications.urls')),
-    # path('ratings/', include('ratings.urls')),
-    # path('reminders/', include('reminders.urls')),
-    # path('stories/', include('stories.urls')),
-    # path('subscriptions/', include('subscriptions.urls')),
-    # path('users/', include('dashboard .urls')),
-    # path('subscriptions/', include('achievements .urls')),
 
+    
+    path('api/users/', include('users.urls')),
+    # path('api/languages/', include('languages.urls')),
+    # path('api/subscriptions/', include('subscriptions.urls')),
+    # path('api/stories/', include('stories.urls')),
+    # path('api/learning/', include('learning.urls')),
+    # path('api/grammar/', include('grammar.urls')),
+    # path('api/ai/', include('ai.urls')),
+    # path('api/duels/', include('duels.urls')),
+    # path('api/ratings/', include('ratings.urls')),
+    # path('api/notifications/', include('notifications.urls')),
+    # path('api/reminders/', include('reminders.urls')),
+    # path('api/achievements/', include('achievements.urls')),
+    # path('api/dashboard/', include('dashboard.urls')),
 
-    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-
+    # Swagger/Redoc
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
