@@ -16,31 +16,23 @@ class GrammarLesson(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    language = models.ForeignKey(
-        'languages.Language',
-        on_delete=models.PROTECT,
-        related_name='grammar_lessons'
-    )
-    cefr_level = models.ForeignKey(
-        'languages.CEFRLevel',
-        on_delete=models.PROTECT,
-        related_name='grammar_lessons'
-    )
+    language = models.ForeignKey('languages.Language', on_delete=models.PROTECT, related_name='grammar_lessons')
+    cefr_level = models.ForeignKey('languages.CEFRLevel', on_delete=models.PROTECT, related_name='grammar_lessons')
+
     title = models.CharField(max_length=255)
     explanation = models.TextField()
-    tip = models.TextField(blank=True)
+    tip = models.TextField(blank=True, default='')
+
     source = models.CharField(max_length=20, choices=SOURCE_CHOICES, default='manual')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
     is_premium = models.BooleanField(default=False)
+
+    tags = models.CharField(max_length=255, blank=True, default='')           # через запятую
     order = models.PositiveSmallIntegerField(default=0)
     read_time_minutes = models.PositiveSmallIntegerField(default=0)
-    created_by = models.ForeignKey(
-        'users.User',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='created_lessons'
-    )
+
+    created_by = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='created_lessons')
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -57,22 +49,15 @@ class GrammarLesson(models.Model):
 class GrammarExample(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    lesson = models.ForeignKey(
-        GrammarLesson,
-        on_delete=models.CASCADE,
-        related_name='examples'
-    )
+    lesson = models.ForeignKey(GrammarLesson, on_delete=models.CASCADE, related_name='examples')
+
     sentence = models.TextField()
     translation = models.TextField()
-    explanation = models.TextField(blank=True)
+    explanation = models.TextField(blank=True, default='')
+
     is_from_story = models.BooleanField(default=False)
-    story = models.ForeignKey(
-        'stories.Story',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='grammar_examples'
-    )
+    story = models.ForeignKey('stories.Story', on_delete=models.SET_NULL, null=True, blank=True, related_name='grammar_examples')
+
     order = models.PositiveSmallIntegerField(default=0)
 
     class Meta:
@@ -95,16 +80,14 @@ class GrammarQuestion(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    lesson = models.ForeignKey(
-        GrammarLesson,
-        on_delete=models.CASCADE,
-        related_name='questions'
-    )
+    lesson = models.ForeignKey(GrammarLesson, on_delete=models.CASCADE, related_name='questions')
+
     question_type = models.CharField(max_length=20, choices=QUESTION_TYPE_CHOICES)
     question_text = models.TextField()
     correct_answer = models.TextField()
     options = models.JSONField(default=list, blank=True)
-    explanation = models.TextField(blank=True)
+    explanation = models.TextField(blank=True, default='')
+
     order = models.PositiveSmallIntegerField(default=0)
 
     class Meta:
@@ -126,20 +109,14 @@ class UserGrammarProgress(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(
-        'users.User',
-        on_delete=models.CASCADE,
-        related_name='grammar_progress'
-    )
-    lesson = models.ForeignKey(
-        GrammarLesson,
-        on_delete=models.CASCADE,
-        related_name='user_progress'
-    )
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='grammar_progress')
+    lesson = models.ForeignKey(GrammarLesson, on_delete=models.CASCADE, related_name='user_progress')
+
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='not_started')
     score = models.PositiveSmallIntegerField(default=0)
     max_score = models.PositiveSmallIntegerField(default=0)
     attempts = models.PositiveSmallIntegerField(default=0)
+
     completed_at = models.DateTimeField(null=True, blank=True)
     last_attempt_at = models.DateTimeField(auto_now=True)
 
@@ -151,3 +128,21 @@ class UserGrammarProgress(models.Model):
 
     def __str__(self):
         return f'{self.user.email} — {self.lesson.title} — {self.status}'
+
+
+class GrammarBookmark(models.Model):
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='grammar_bookmarks')
+    lesson = models.ForeignKey(GrammarLesson, on_delete=models.CASCADE, related_name='bookmarks')
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'grammar_bookmarks'
+        verbose_name = 'Закладка'
+        verbose_name_plural = 'Закладки'
+        unique_together = ('user', 'lesson')
+
+    def __str__(self):
+        return f'{self.user.email} — {self.lesson.title}'
