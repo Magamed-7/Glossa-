@@ -19,11 +19,13 @@ class LanguageAdmin(admin.ModelAdmin):
         "code_badge",
         "active_badge",
         "levels_count",
+        "story_submission_min_level",
         "created_at",
     )
 
     list_filter = (
         "is_active",
+        "story_submission_min_level",
     )
 
     search_fields = (
@@ -45,6 +47,7 @@ class LanguageAdmin(admin.ModelAdmin):
                 "native_name",
                 "code",
                 "flag_emoji",
+                "story_submission_min_level",
             )
         }),
         ("📘 Описание", {
@@ -79,17 +82,11 @@ class LanguageAdmin(admin.ModelAdmin):
 
     @admin.display(description="📡 Активен")
     def active_badge(self, obj):
-        if obj.is_active:
-            return "🟢 Да"
-        return "🔴 Нет"
+        return "🟢 Да" if obj.is_active else "🔴 Нет"
 
     @admin.display(description="📊 Уровни")
     def levels_count(self, obj):
-        count = obj.cefr_levels.count()
-        return f"{count} уровней"
-    
-
-
+        return f"{obj.cefr_levels.count()} уровней"
 
 
 @admin.register(CEFRLevel)
@@ -114,9 +111,7 @@ class CEFRLevelAdmin(admin.ModelAdmin):
         "language__name",
     )
 
-    autocomplete_fields = (
-        "language",
-    )
+    autocomplete_fields = ("language",)
 
     ordering = ("language", "order")
 
@@ -152,7 +147,6 @@ class CEFRLevelAdmin(admin.ModelAdmin):
             "C1": "#8e44ad",
             "C2": "#2c3e50",
         }
-
         return format_html(
             "<b style='color:{};font-size:13px;'>{}</b>",
             colors.get(obj.level, "#000"),
