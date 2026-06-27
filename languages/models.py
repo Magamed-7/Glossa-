@@ -11,6 +11,9 @@ class Language(models.Model):
     flag_emoji = models.CharField(max_length=10, blank=True)
     description = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)
+
+    story_submission_min_level = models.CharField(max_length=2, default='B2')
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -38,11 +41,12 @@ class CEFRLevel(models.Model):
     language = models.ForeignKey(
         Language,
         on_delete=models.CASCADE,
-        related_name='cefr_levels'
+        related_name='cefr_levels',
     )
     level = models.CharField(max_length=2, choices=LEVEL_CHOICES)
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True)
+ 
     min_vocabulary = models.PositiveIntegerField(default=0)
     max_vocabulary = models.PositiveIntegerField(default=0)
     order = models.PositiveSmallIntegerField(default=0)
