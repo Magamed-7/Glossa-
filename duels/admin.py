@@ -7,27 +7,23 @@ from .models import Duel, DuelRound, DuelResult
 class DuelRoundInline(admin.TabularInline):
     model = DuelRound
     extra = 0
-    readonly_fields = (
-        "round_number",
-        "question_text",
-        "correct_answer",
-        "answer_player_one",
-        "answer_player_two",
-        "round_winner",
-        "is_draw",
-    )
+    show_change_link = True
 
     fields = (
         "round_number",
-        "question_text",
-        "correct_answer",
-        "answer_player_one",
-        "answer_player_two",
+        "round_type",
         "round_winner",
         "is_draw",
+        "started_at",
+        "finished_at",
     )
 
-    show_change_link = True
+    readonly_fields = (
+        "round_number",
+        "started_at",
+        "finished_at",
+    )
+
 
 
 class DuelResultInline(admin.StackedInline):
@@ -40,25 +36,19 @@ class DuelResultInline(admin.StackedInline):
 class DuelAdmin(admin.ModelAdmin):
 
     list_display = (
-        "battle",
-        "language_badge",
-        "mode_badge",
-        "status_badge",
-        "progress_bar",
-        "winner_badge",
+        "battle_display",
+        "language_display",
+        "level_display",
+        "mode_display",
+        "opponent_display",
+        "status_display",
+        "progress_display",
+        "winner_display",
         "created_at",
     )
 
     list_display_links = (
-        "battle",
-    )
-
-    list_filter = (
-        "status",
-        "mode",
-        "language",
-        "round_type",
-        "created_at",
+        "battle_display",
     )
 
     search_fields = (
@@ -67,11 +57,21 @@ class DuelAdmin(admin.ModelAdmin):
         "winner__email",
     )
 
+    list_filter = (
+        "status",
+        "mode",
+        "opponent_type",
+        "language",
+        "cefr_level",
+        "created_at",
+    )
+
     autocomplete_fields = (
         "player_one",
         "player_two",
         "winner",
         "language",
+        "cefr_level",
     )
 
     readonly_fields = (
@@ -79,7 +79,7 @@ class DuelAdmin(admin.ModelAdmin):
         "created_at",
         "started_at",
         "finished_at",
-        "is_active_badge",
+        "is_active_display",
     )
 
     list_select_related = (
@@ -87,42 +87,55 @@ class DuelAdmin(admin.ModelAdmin):
         "player_two",
         "winner",
         "language",
-    )
-
-    inlines = (
-        DuelRoundInline,
-        DuelResultInline,
+        "cefr_level",
     )
 
     ordering = (
         "-created_at",
     )
 
+    date_hierarchy = "created_at"
+
+    inlines = (
+        DuelRoundInline,
+        DuelResultInline,
+    )
+
+
     fieldsets = (
         (
-            "⚔️ Информация о дуэли",
+            "⚔️ Участники",
             {
                 "fields": (
-                    "id",
                     "player_one",
                     "player_two",
-                    "language",
-                    "mode",
-                    "status",
-                    "round_type",
+                    "winner",
+                    "is_draw",
                 )
-            },
+            }
         ),
         (
-            "🎯 Прогресс",
+            "🌍 Настройки дуэли",
             {
                 "fields": (
-                    "total_rounds",
-                    "current_round",
-                    "winner",
-                    "is_active_badge",
+                    "language",
+                    "cefr_level",
+                    "mode",
+                    "opponent_type",
                 )
-            },
+            }
+        ),
+        (
+            "🎯 Игровой процесс",
+            {
+                "fields": (
+                    "status",
+                    "current_round",
+                    "total_rounds",
+                    "time_per_round_seconds",
+                    "is_active_display",
+                )
+            }
         ),
         (
             "⏰ Время",
@@ -132,92 +145,89 @@ class DuelAdmin(admin.ModelAdmin):
                     "finished_at",
                     "created_at",
                 )
-            },
+            }
+        ),
+        (
+            "🔐 Системная информация",
+            {
+                "classes": ("collapse",),
+                "fields": (
+                    "id",
+                )
+            }
         ),
     )
 
     @admin.display(description="⚔️ Дуэль")
-    def battle(self, obj):
-        p2 = obj.player_two.email if obj.player_two else "❓ Ожидание"
-        return f"{obj.player_one.email} 🆚 {p2}"
+    def battle_display(self, obj):
+        if obj.opponent_type == "ai":
+            opponent = "🤖 AI Trainer"
+        elif obj.player_two:
+            opponent = f"👤 {obj.player_two.email}"
+        else:
+            opponent = "❓ Ожидание"
 
-    @admin.display(description="🌍 Язык")
-    def language_badge(self, obj):
         return format_html(
-            "<b>🌍 {}</b>",
-            obj.language
+            "<b>👤 {} 🆚 {}</b>",
+            obj.player_one.email,
+            opponent,
         )
 
-    @admin.display(description="🏅 Режим")
-    def mode_badge(self, obj):
-        colors = {
-            "casual": "#3498db",
-            "rated": "#e74c3c",
-        }
+    @admin.display(description="🌍 Язык")
+    def language_display(self, obj):
+        return f"🌍 {obj.language}"
 
-        icons = {
-            "casual": "🎮",
-            "rated": "🏆",
-        }
+    @admin.display(description="📚 Уровень")
+    def level_display(self, obj):
+        return format_html(
+            "<b>🎓 {}</b>",
+            obj.cefr_level
+        )
+
+    @admin.display(description="🏆 Режим")
+    def mode_display(self, obj):
+        icon = "🎮" if obj.mode == "casual" else "🏅"
 
         return format_html(
-            '<span style="color:{};font-weight:bold;">{} {}</span>',
-            colors[obj.mode],
-            icons[obj.mode],
+            "<b>{} {}</b>",
+            icon,
             obj.get_mode_display(),
         )
 
+    @admin.display(description="🤝 Соперник")
+    def opponent_display(self, obj):
+        if obj.opponent_type == "ai":
+            return "🤖 AI Trainer"
+
+        return "👤 Игрок"
+
     @admin.display(description="📡 Статус")
-    def status_badge(self, obj):
-        colors = {
-            "waiting": "#f39c12",
-            "in_progress": "#3498db",
-            "finished": "#27ae60",
-            "cancelled": "#e74c3c",
-            "draw": "#9b59b6",
+    def status_display(self, obj):
+
+        styles = {
+            "waiting": ("⏳", "#f39c12"),
+            "in_progress": ("🔥", "#3498db"),
+            "finished": ("✅", "#27ae60"),
+            "cancelled": ("❌", "#e74c3c"),
         }
 
-        icons = {
-            "waiting": "⏳",
-            "in_progress": "🔥",
-            "finished": "✅",
-            "cancelled": "❌",
-            "draw": "🤝",
-        }
+        icon, color = styles.get(obj.status)
 
         return format_html(
             '<b style="color:{};">{} {}</b>',
-            colors[obj.status],
-            icons[obj.status],
+            color,
+            icon,
             obj.get_status_display(),
         )
 
     @admin.display(description="📈 Прогресс")
-    def progress_bar(self, obj):
-        percent = int((obj.current_round / obj.total_rounds) * 100) if obj.total_rounds else 0
-
-        return format_html(
-            """
-            <div style="width:120px;background:#ddd;border-radius:10px;">
-                <div style="
-                    width:{}%;
-                    background:#27ae60;
-                    color:white;
-                    text-align:center;
-                    border-radius:10px;
-                ">
-                    {}/{}
-                </div>
-            </div>
-            """,
-            percent,
-            obj.current_round,
-            obj.total_rounds,
-        )
+    def progress_display(self, obj):
+        return f"🎯 {obj.current_round}/{obj.total_rounds}"
 
     @admin.display(description="👑 Победитель")
-    def winner_badge(self, obj):
-        if obj.status == "draw":
+    def winner_display(self, obj):
+
+        if obj.is_draw:
             return "🤝 Ничья"
 
         if obj.winner:
@@ -225,18 +235,16 @@ class DuelAdmin(admin.ModelAdmin):
 
         return "—"
 
-    @admin.display(description="🔥 Активна")
-    def is_active_badge(self, obj):
+    @admin.display(description="🟢 Активна")
+    def is_active_display(self, obj):
         if obj.is_active:
             return format_html(
-                '<span style="color:green;font-weight:bold;">{}</span>',
-                '🟢 Да'
+                '<span style="color:green;font-weight:bold;">🟢 Активна</span>'
             )
+
         return format_html(
-            '<span style="color:red;font-weight:bold;">{}</span>',
-            '🔴 Нет'
+            '<span style="color:red;font-weight:bold;">🔴 Не активна</span>'
         )
-    
 
 
 
@@ -247,12 +255,14 @@ class DuelRoundAdmin(admin.ModelAdmin):
     list_display = (
         "duel",
         "round_number",
+        "round_type_display",
         "winner_display",
-        "round_result",
+        "times_display",
         "started_at",
     )
 
     list_filter = (
+        "round_type",
         "is_draw",
         "duel__language",
     )
@@ -268,18 +278,68 @@ class DuelRoundAdmin(admin.ModelAdmin):
         "story_word",
     )
 
-    readonly_fields = (
-        "started_at",
-        "finished_at",
-    )
-
     list_select_related = (
         "duel",
         "round_winner",
         "story_word",
     )
 
-    @admin.display(description="🏆 Победитель")
+    readonly_fields = (
+        "started_at",
+        "finished_at",
+    )
+
+    fieldsets = (
+        (
+            "❓ Вопрос",
+            {
+                "fields": (
+                    "duel",
+                    "round_number",
+                    "round_type",
+                    "question_text",
+                    "correct_answer",
+                    "options",
+                )
+            }
+        ),
+        (
+            "👥 Ответы игроков",
+            {
+                "fields": (
+                    "answer_player_one",
+                    "answer_player_two",
+                    "time_player_one",
+                    "time_player_two",
+                )
+            }
+        ),
+        (
+            "🏆 Результат",
+            {
+                "fields": (
+                    "round_winner",
+                    "is_draw",
+                    "story_word",
+                )
+            }
+        ),
+        (
+            "⏰ Время",
+            {
+                "fields": (
+                    "started_at",
+                    "finished_at",
+                )
+            }
+        ),
+    )
+
+    @admin.display(description="📝 Тип")
+    def round_type_display(self, obj):
+        return obj.get_round_type_display()
+
+    @admin.display(description="👑 Победитель")
     def winner_display(self, obj):
         if obj.is_draw:
             return "🤝 Ничья"
@@ -289,11 +349,13 @@ class DuelRoundAdmin(admin.ModelAdmin):
 
         return "—"
 
-    @admin.display(description="📊 Результат")
-    def round_result(self, obj):
-        return f"{obj.answer_player_one} ⚔️ {obj.answer_player_two}"
-    
-
+    @admin.display(description="⚡ Скорость")
+    def times_display(self, obj):
+        return (
+            f"👤 {obj.time_player_one or '-'}с | "
+            f"🆚 "
+            f"{obj.time_player_two or '-'}с"
+        )
 
 
 
@@ -302,9 +364,9 @@ class DuelResultAdmin(admin.ModelAdmin):
 
     list_display = (
         "duel",
-        "score",
-        "rating_changes",
-        "avg_time",
+        "score_display",
+        "rating_display",
+        "avg_time_display",
         "created_at",
     )
 
@@ -312,20 +374,29 @@ class DuelResultAdmin(admin.ModelAdmin):
         "created_at",
     )
 
+    autocomplete_fields = (
+        "duel",
+    )
+
     @admin.display(description="🏆 Счёт")
-    def score(self, obj):
-        return f"{obj.score_player_one} : {obj.score_player_two}"
+    def score_display(self, obj):
+        return (
+            f"🥇 {obj.score_player_one}"
+            f" : "
+            f"{obj.score_player_two} 🥈"
+        )
 
     @admin.display(description="📈 Рейтинг")
-    def rating_changes(self, obj):
+    def rating_display(self, obj):
         return (
             f"{obj.rating_change_player_one:+} / "
             f"{obj.rating_change_player_two:+}"
         )
 
     @admin.display(description="⚡ Среднее время")
-    def avg_time(self, obj):
+    def avg_time_display(self, obj):
         return (
-            f"{obj.avg_time_player_one:.2f}s / "
-            f"{obj.avg_time_player_two:.2f}s"
+            f"{obj.avg_time_player_one or '-'}с "
+            f"vs "
+            f"{obj.avg_time_player_two or '-'}с"
         )
