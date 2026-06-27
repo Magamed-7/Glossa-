@@ -20,6 +20,8 @@ urlpatterns = [
     # path('reminders/', include('reminders.urls')),
     # path('stories/', include('stories.urls')),
     # path('subscriptions/', include('subscriptions.urls')),
+    # path('users/', include('dashboard .urls')),
+    # path('subscriptions/', include('achievements .urls')),
 
 
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),

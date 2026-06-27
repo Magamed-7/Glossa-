@@ -48,8 +48,6 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'django_filters',
-    # 'channels',
-    # 'corsheaders',
 
 
     'ai.apps.AiConfig',
@@ -62,7 +60,9 @@ INSTALLED_APPS = [
     'reminders.apps.RemindersConfig',
     'stories.apps.StoriesConfig',
     'subscriptions.apps.SubscriptionsConfig',
-    'users.apps.UsersConfig'
+    'users.apps.UsersConfig',
+    'achievements.apps.AchievementsConfig',
+    'dashboard.apps.DashboardConfig',
 ]
 
 MIDDLEWARE = [
