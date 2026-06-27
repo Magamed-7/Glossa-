@@ -6,42 +6,39 @@ class Story(models.Model):
 
     STATUS_CHOICES = [
         ('draft', 'Черновик'),
+        ('pending_review', 'На модерации'),
         ('published', 'Опубликована'),
+        ('rejected', 'Отклонена'),
         ('archived', 'Архив'),
     ]
 
     SOURCE_CHOICES = [
         ('manual', 'Вручную'),
         ('ai_generated', 'Сгенерирована AI'),
-        ('imported', 'Импортирована'),
+        ('ai_assisted', 'С помощью AI'),
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)
     content = models.TextField()
-    language = models.ForeignKey(
-        'languages.Language',
-        on_delete=models.PROTECT,
-        related_name='stories'
-    )
-    cefr_level = models.ForeignKey(
-        'languages.CEFRLevel',
-        on_delete=models.PROTECT,
-        related_name='stories'
-    )
-    topic = models.CharField(max_length=100, blank=True)
+
+    language = models.ForeignKey('languages.Language', on_delete=models.PROTECT, related_name='stories')
+    cefr_level = models.ForeignKey('languages.CEFRLevel', on_delete=models.PROTECT, related_name='stories')
+
+    topic = models.CharField(max_length=100, blank=True, default='')
+    tags = models.CharField(max_length=255, blank=True, default='')        # через запятую
+
     source = models.CharField(max_length=20, choices=SOURCE_CHOICES, default='manual')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
+
     is_premium = models.BooleanField(default=False)
+    is_featured = models.BooleanField(default=False)                       # топ каталога
+
     read_time_minutes = models.PositiveSmallIntegerField(default=0)
     views_count = models.PositiveIntegerField(default=0)
-    created_by = models.ForeignKey(
-        'users.User',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='created_stories'
-    )
+
+    created_by = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='created_stories')
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -69,22 +66,16 @@ class StoryWord(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    story = models.ForeignKey(
-        Story,
-        on_delete=models.CASCADE,
-        related_name='words'
-    )
+    story = models.ForeignKey(Story, on_delete=models.CASCADE, related_name='words')
+
     word = models.CharField(max_length=100)
     translation = models.CharField(max_length=255)
-    context_sentence = models.TextField(blank=True)
-    part_of_speech = models.CharField(
-        max_length=20,
-        choices=PART_OF_SPEECH_CHOICES,
-        default='other'
-    )
+    context_sentence = models.TextField(blank=True, default='')
+    part_of_speech = models.CharField(max_length=20, choices=PART_OF_SPEECH_CHOICES, default='other')
     difficulty = models.PositiveSmallIntegerField(default=1)
-    audio_url = models.URLField(blank=True)
-    note = models.TextField(blank=True)
+
+    audio_url = models.URLField(blank=True, default='')
+    note = models.TextField(blank=True, default='')
 
     class Meta:
         db_table = 'story_words'
@@ -99,16 +90,9 @@ class StoryWord(models.Model):
 class UserStoryProgress(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(
-        'users.User',
-        on_delete=models.CASCADE,
-        related_name='story_progress'
-    )
-    story = models.ForeignKey(
-        Story,
-        on_delete=models.CASCADE,
-        related_name='user_progress'
-    )
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='story_progress')
+    story = models.ForeignKey(Story, on_delete=models.CASCADE, related_name='user_progress')
+
     is_completed = models.BooleanField(default=False)
     last_read_at = models.DateTimeField(auto_now=True)
     read_count = models.PositiveSmallIntegerField(default=0)
