@@ -12,14 +12,16 @@ class UserPhraseAdmin(admin.ModelAdmin):
         "user",
         "language",
         "source_badge",
-        "mastered_badge",
+        "status_badge",
+        "category",
         "created_at",
     )
 
     list_filter = (
         "language",
         "source",
-        "is_mastered",
+        "status",
+        "category",
     )
 
     search_fields = (
@@ -39,7 +41,7 @@ class UserPhraseAdmin(admin.ModelAdmin):
     ordering = ("-created_at",)
 
     fieldsets = (
-        ("📘 Фраза", {
+        ("📘 Слово", {
             "fields": (
                 "user",
                 "language",
@@ -47,6 +49,7 @@ class UserPhraseAdmin(admin.ModelAdmin):
                 "translation",
                 "context_sentence",
                 "note",
+                "category",
             )
         }),
         ("🔗 Источник", {
@@ -56,9 +59,9 @@ class UserPhraseAdmin(admin.ModelAdmin):
                 "grammar_lesson",
             )
         }),
-        ("🧠 Статус памяти", {
+        ("🧠 Статус", {
             "fields": (
-                "is_mastered",
+                "status",
                 "created_at",
             )
         }),
@@ -66,13 +69,9 @@ class UserPhraseAdmin(admin.ModelAdmin):
 
     readonly_fields = ("created_at",)
 
-    @admin.display(description="🧩 Фраза")
+    @admin.display(description="🧩 Слово")
     def phrase_badge(self, obj):
-        return format_html(
-            "<b>{}</b> → {}",
-            obj.word,
-            obj.translation
-        )
+        return format_html("<b>{}</b> → {}", obj.word, obj.translation)
 
     @admin.display(description="📥 Источник")
     def source_badge(self, obj):
@@ -84,11 +83,14 @@ class UserPhraseAdmin(admin.ModelAdmin):
         }
         return f"{icons.get(obj.source, '')} {obj.get_source_display()}"
 
-    @admin.display(description="🧠 Выучено")
-    def mastered_badge(self, obj):
-        return "✅ Да" if obj.is_mastered else "—"
-    
-
+    @admin.display(description="📡 Статус")
+    def status_badge(self, obj):
+        colors = {"active": "#f39c12", "mastered": "#27ae60"}
+        return format_html(
+            '<b style="color:{};">{}</b>',
+            colors.get(obj.status, "#000"),
+            obj.get_status_display()
+        )
 
 
 @admin.register(ReviewSession)
@@ -100,6 +102,7 @@ class ReviewSessionAdmin(admin.ModelAdmin):
         "status_badge",
         "interval_badge",
         "repetitions",
+        "consecutive_badge",
     )
 
     list_filter = (
@@ -119,6 +122,7 @@ class ReviewSessionAdmin(admin.ModelAdmin):
         "easiness_factor",
         "interval_days",
         "repetitions",
+        "consecutive_correct",
         "next_review_at",
         "last_reviewed_at",
     )
@@ -135,6 +139,7 @@ class ReviewSessionAdmin(admin.ModelAdmin):
                 "easiness_factor",
                 "interval_days",
                 "repetitions",
+                "consecutive_correct",
             )
         }),
         ("⏰ Время", {
@@ -145,7 +150,7 @@ class ReviewSessionAdmin(admin.ModelAdmin):
         }),
     )
 
-    @admin.display(description="📅 Следующее повторение")
+    @admin.display(description="📅 Следующее")
     def next_review_badge(self, obj):
         return obj.next_review_at.strftime("%d.%m.%Y")
 
@@ -157,10 +162,8 @@ class ReviewSessionAdmin(admin.ModelAdmin):
             "good": "#27ae60",
             "easy": "#2ecc71",
         }
-
         if not obj.last_result:
             return "—"
-
         return format_html(
             '<b style="color:{};">{}</b>',
             colors.get(obj.last_result, "#000"),
@@ -169,4 +172,8 @@ class ReviewSessionAdmin(admin.ModelAdmin):
 
     @admin.display(description="📈 Интервал")
     def interval_badge(self, obj):
-        return f"{obj.interval_days} дней"
+        return f"{obj.interval_days} дн."
+
+    @admin.display(description="✅ Подряд")
+    def consecutive_badge(self, obj):
+        return f"{obj.consecutive_correct} подряд"
