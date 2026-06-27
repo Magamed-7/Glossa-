@@ -26,13 +26,13 @@ class Story(models.Model):
     cefr_level = models.ForeignKey('languages.CEFRLevel', on_delete=models.PROTECT, related_name='stories')
 
     topic = models.CharField(max_length=100, blank=True, default='')
-    tags = models.CharField(max_length=255, blank=True, default='')        # через запятую
+    tags = models.CharField(max_length=255, blank=True, default='')       
 
     source = models.CharField(max_length=20, choices=SOURCE_CHOICES, default='manual')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
 
     is_premium = models.BooleanField(default=False)
-    is_featured = models.BooleanField(default=False)                       # топ каталога
+    is_featured = models.BooleanField(default=False)                       
 
     read_time_minutes = models.PositiveSmallIntegerField(default=0)
     views_count = models.PositiveIntegerField(default=0)
