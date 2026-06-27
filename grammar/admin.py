@@ -1,14 +1,16 @@
 from django.contrib import admin
 from django.utils.html import format_html
 
-from .models import GrammarLesson, GrammarExample, GrammarQuestion, UserGrammarProgress
+from .models import (
+    GrammarLesson, GrammarExample, GrammarQuestion,
+    UserGrammarProgress, GrammarBookmark,
+)
 
 
 class GrammarExampleInline(admin.TabularInline):
     model = GrammarExample
     extra = 0
     fields = ("sentence", "translation", "order", "is_from_story")
-    readonly_fields = ()
     show_change_link = True
 
 
@@ -45,6 +47,7 @@ class GrammarLessonAdmin(admin.ModelAdmin):
         "title",
         "explanation",
         "tip",
+        "tags",
     )
 
     autocomplete_fields = (
@@ -73,6 +76,7 @@ class GrammarLessonAdmin(admin.ModelAdmin):
             "fields": (
                 "explanation",
                 "tip",
+                "tags",
             )
         }),
         ("⚙️ Настройки", {
@@ -119,19 +123,15 @@ class GrammarLessonAdmin(admin.ModelAdmin):
             "published": "#27ae60",
             "archived": "#7f8c8d",
         }
-
         return format_html(
             '<b style="color:{};">{}</b>',
-            colors[obj.status],
+            colors.get(obj.status, "#000"),
             obj.get_status_display()
         )
 
     @admin.display(description="🤖 Источник")
     def source_badge(self, obj):
-        icons = {
-            "manual": "✍️",
-            "ai_generated": "🤖",
-        }
+        icons = {"manual": "✍️", "ai_generated": "🤖"}
         return f"{icons.get(obj.source, '')} {obj.get_source_display()}"
 
     @admin.display(description="💎 Premium")
@@ -141,9 +141,6 @@ class GrammarLessonAdmin(admin.ModelAdmin):
     @admin.display(description="⏱ Время")
     def read_time(self, obj):
         return f"{obj.read_time_minutes} мин"
-    
-
-
 
 
 @admin.register(GrammarExample)
@@ -185,9 +182,6 @@ class GrammarExampleAdmin(admin.ModelAdmin):
     @admin.display(description="📖 История")
     def story_flag(self, obj):
         return "📖 Да" if obj.is_from_story else "—"
-    
-
-
 
 
 @admin.register(GrammarQuestion)
@@ -222,15 +216,11 @@ class GrammarQuestionAdmin(admin.ModelAdmin):
             "true_false": "⚖️",
             "translate": "🌍",
         }
-
         return f"{icons.get(obj.question_type, '')} {obj.get_question_type_display()}"
 
     @admin.display(description="🧠 Вопрос")
     def question_preview(self, obj):
         return obj.question_text[:60]
-    
-
-
 
 
 @admin.register(UserGrammarProgress)
@@ -257,9 +247,7 @@ class UserGrammarProgressAdmin(admin.ModelAdmin):
 
     autocomplete_fields = ("user", "lesson")
 
-    readonly_fields = (
-        "last_attempt_at",
-    )
+    readonly_fields = ("last_attempt_at",)
 
     @admin.display(description="📡 Статус")
     def status_badge(self, obj):
@@ -268,10 +256,9 @@ class UserGrammarProgressAdmin(admin.ModelAdmin):
             "in_progress": "#f39c12",
             "completed": "#27ae60",
         }
-
         return format_html(
             '<b style="color:{};">{}</b>',
-            colors[obj.status],
+            colors.get(obj.status, "#000"),
             obj.get_status_display()
         )
 
@@ -281,15 +268,36 @@ class UserGrammarProgressAdmin(admin.ModelAdmin):
 
     @admin.display(description="📈 Прогресс")
     def progress_badge(self, obj):
-        if obj.max_score == 0:
-            percent = 0
-        else:
-            percent = int((obj.score / obj.max_score) * 100)
-
+        percent = int((obj.score / obj.max_score) * 100) if obj.max_score else 0
         color = "#27ae60" if percent >= 70 else "#f39c12"
-
         return format_html(
             '<b style="color:{};">{}%</b>',
-            color,
-            percent
+            color, percent
         )
+
+
+@admin.register(GrammarBookmark)
+class GrammarBookmarkAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "user",
+        "lesson",
+        "created_at",
+    )
+
+    list_filter = (
+        "lesson__language",
+        "lesson__cefr_level",
+    )
+
+    search_fields = (
+        "user__email",
+        "lesson__title",
+    )
+
+    autocomplete_fields = (
+        "user",
+        "lesson",
+    )
+
+    ordering = ("-created_at",)
