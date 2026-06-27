@@ -6,10 +6,11 @@ class AIRequestLog(models.Model):
 
     REQUEST_TYPE_CHOICES = [
         ('generate_story', 'Генерация истории'),
+        ('assist_story_creation', 'Помощь при создании истории'),
         ('explain_word', 'Объяснение слова'),
         ('explain_grammar', 'Объяснение грамматики'),
-        ('generate_question', 'Генерация вопроса'),
-        ('translate', 'Перевод'),
+        ('generate_duel_question', 'Генерация вопроса для дуэли'),
+        ('ai_duel_answer', 'Ответ AI тренера в дуэли'),
     ]
 
     STATUS_CHOICES = [

@@ -114,10 +114,11 @@ class AIRequestLogAdmin(admin.ModelAdmin):
     def request_icon(self, obj):
         icons = {
             "generate_story": "📖 История",
+            "assist_story_creation": "✍️ Ассистент",
             "explain_word": "📚 Слово",
             "explain_grammar": "📝 Грамматика",
-            "generate_question": "❓ Вопрос",
-            "translate": "🌍 Перевод",
+            "generate_duel_question": "❓ Вопрос дуэли",
+            "ai_duel_answer": "🤖 AI Тренер",
         }
 
         return icons.get(obj.request_type, "🤖 AI")
@@ -132,10 +133,11 @@ class AIRequestLogAdmin(admin.ModelAdmin):
     def request_type_badge(self, obj):
         colors = {
             "generate_story": "#8e44ad",
+            "assist_story_creation": "#27ae60",
             "explain_word": "#3498db",
             "explain_grammar": "#e67e22",
-            "generate_question": "#16a085",
-            "translate": "#2980b9",
+            "generate_duel_question": "#16a085",
+            "ai_duel_answer": "#2c3e50",
         }
 
         return format_html(
