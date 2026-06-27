@@ -19,6 +19,11 @@ class Reminder(models.Model):
         ('skipped', 'Пропущено'),
     ]
 
+    CHANNEL_CHOICES = [
+        ('telegram', 'Telegram'),
+        ('push', 'Push-уведомление'),
+    ]
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(
         'users.User',
@@ -29,6 +34,12 @@ class Reminder(models.Model):
     title = models.CharField(max_length=255)
     body = models.TextField()
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    channel = models.CharField(
+        max_length=15,
+        choices=CHANNEL_CHOICES,
+        default='telegram',
+        verbose_name="Канал доставки"
+    )
     scheduled_at = models.DateTimeField()
     sent_at = models.DateTimeField(null=True, blank=True)
     error_message = models.TextField(blank=True)

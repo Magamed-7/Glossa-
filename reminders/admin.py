@@ -11,6 +11,7 @@ class ReminderAdmin(admin.ModelAdmin):
         "type_badge",
         "user",
         "title_short",
+        "channel_badge",
         "status_badge",
         "scheduled_at",
         "sent_at",
@@ -18,6 +19,7 @@ class ReminderAdmin(admin.ModelAdmin):
 
     list_filter = (
         "reminder_type",
+        "channel",
         "status",
         "scheduled_at",
     )
@@ -51,6 +53,7 @@ class ReminderAdmin(admin.ModelAdmin):
         ("📡 Отправка", {
             "fields": (
                 "status",
+                "channel",
                 "scheduled_at",
                 "sent_at",
                 "error_message",
@@ -63,6 +66,14 @@ class ReminderAdmin(admin.ModelAdmin):
             )
         }),
     )
+
+    @admin.display(description="📨 Канал")
+    def channel_badge(self, obj):
+        icons = {
+            "telegram": "✈️",
+            "push": "📲",
+        }
+        return f"{icons.get(obj.channel, '📡')} {obj.get_channel_display()}"
 
     @admin.display(description="📌 Тип")
     def type_badge(self, obj):
