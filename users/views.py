@@ -426,3 +426,141 @@ class UserLanguageDetailView(APIView):
         language.delete()
         logger.info(f'Язык {language.language_code} удалён для: {request.user.email}')
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+
+
+
+
+class PublicAuthorProfileView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, username):
+        try:
+            user = User.objects.select_related('profile').prefetch_related(
+                'user_languages',
+                'user_achievements',
+            ).get(username=username, is_active=True)
+        except User.DoesNotExist:
+            return Response({'detail': 'Пользователь не найден.'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = PublicAuthorProfileSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class FriendshipListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        friendships = Friendship.objects.filter(
+            from_user=request.user,
+            status='accepted',
+        ).select_related('to_user') | Friendship.objects.filter(
+            to_user=request.user,
+            status='accepted',
+        ).select_related('from_user')
+
+        serializer = FriendshipSerializer(friendships, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        to_username = request.data.get('to_user')
+        if not to_username:
+            return Response(
+                {'detail': 'Имя пользователя (to_user) обязательно.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            to_user = User.objects.get(username=to_username)
+        except User.DoesNotExist:
+            return Response({'detail': 'Пользователь не найден.'}, status=status.HTTP_404_NOT_FOUND)
+
+        if to_user == request.user:
+            return Response(
+                {'detail': 'Нельзя отправить запрос самому себе.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if Friendship.objects.filter(from_user=request.user, to_user=to_user).exists():
+            return Response(
+                {'detail': 'Запрос уже отправлен или вы уже друзья.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        friendship = Friendship.objects.create(
+            from_user=request.user,
+            to_user=to_user,
+            status='pending',
+        )
+
+        # TODO
+        logger.info(f'Запрос в друзья: {request.user.username} → {to_user.username}')
+        serializer = FriendshipSerializer(friendship)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class FriendshipIncomingView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        incoming = Friendship.objects.filter(
+            to_user=request.user,
+            status='pending',
+        ).select_related('from_user')
+        serializer = FriendshipSerializer(incoming, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class FriendshipActionView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, pk):
+        try:
+            friendship = Friendship.objects.get(id=pk, to_user=request.user, status='pending')
+        except Friendship.DoesNotExist:
+            return Response(
+                {'detail': 'Запрос в друзья не найден.'},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        action = request.data.get('action')
+        if action not in ['accept', 'reject']:
+            return Response(
+                {'detail': 'Действие должно быть "accept" или "reject".'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if action == 'accept':
+            friendship.status = 'accepted'
+            # TODO
+            logger.info(f'Дружба принята: {friendship.from_user.username} ↔ {request.user.username}')
+        else:
+            friendship.status = 'rejected'
+            logger.info(f'Дружба отклонена: {friendship.from_user.username} → {request.user.username}')
+
+        friendship.save()
+        serializer = FriendshipSerializer(friendship)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class FriendshipDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, pk):
+        try:
+            friendship = Friendship.objects.get(
+                id=pk,
+                status='accepted',
+            )
+           
+            if friendship.from_user != request.user and friendship.to_user != request.user:
+                return Response(status=status.HTTP_403_FORBIDDEN)
+        except Friendship.DoesNotExist:
+            return Response({'detail': 'Дружба не найдена.'}, status=status.HTTP_404_NOT_FOUND)
+
+        friendship.delete()
+        logger.info(f'Дружба удалена пользователем: {request.user.username}')
+        return Response(status=status.HTTP_204_NO_CONTENT)
