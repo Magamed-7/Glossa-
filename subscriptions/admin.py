@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-
-from .models import Plan, Subscription, PaymentEvent
+from .models import Plan, Subscription, PaymentEvent, TrialPeriod
 
 
 @admin.register(Plan)
@@ -9,14 +8,14 @@ class PlanAdmin(admin.ModelAdmin):
 
     list_display = (
         "name_badge",
-        "type_badge",
+        "period",
         "price_badge",
         "active_badge",
         "limits_badge",
     )
 
     list_filter = (
-        "plan_type",
+        "period",
         "is_active",
     )
 
@@ -31,7 +30,7 @@ class PlanAdmin(admin.ModelAdmin):
         ("💳 Тариф", {
             "fields": (
                 "name",
-                "plan_type",
+                "period",
                 "price",
                 "currency",
                 "description",
@@ -40,11 +39,13 @@ class PlanAdmin(admin.ModelAdmin):
         ("📊 Лимиты", {
             "fields": (
                 "stories_per_day",
+                "stories_per_week",
                 "phrases_per_day",
-                "ai_access",
                 "rated_duels_access",
-                "full_analytics",
+                "global_leaderboard",
+                "ai_access",
                 "full_catalog_access",
+                "ai_story_assist",
             )
         }),
         ("⚙️ Система", {
@@ -61,10 +62,6 @@ class PlanAdmin(admin.ModelAdmin):
     def name_badge(self, obj):
         return format_html("<b>{}</b>", obj.name)
 
-    @admin.display(description="📦 Тип")
-    def type_badge(self, obj):
-        return obj.get_plan_type_display()
-
     @admin.display(description="💰 Цена")
     def price_badge(self, obj):
         return f"{obj.price} {obj.currency}"
@@ -75,10 +72,7 @@ class PlanAdmin(admin.ModelAdmin):
 
     @admin.display(description="📊 Лимиты")
     def limits_badge(self, obj):
-        return f"{obj.stories_per_day}/day stories"
-    
-
-
+        return f"{obj.stories_per_day}/day · {obj.phrases_per_day} phrases"
 
 
 @admin.register(Subscription)
@@ -88,6 +82,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
         "user",
         "plan",
         "status_badge",
+        "trial_badge",
         "active_badge",
         "expires_at",
         "auto_renew",
@@ -96,6 +91,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
     list_filter = (
         "status",
         "plan",
+        "is_trial",
         "auto_renew",
     )
 
@@ -116,6 +112,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
                 "user",
                 "plan",
                 "status",
+                "is_trial",
             )
         }),
         ("⏰ Время", {
@@ -147,36 +144,37 @@ class SubscriptionAdmin(admin.ModelAdmin):
             "cancelled": "#95a5a6",
             "pending": "#f39c12",
         }
-
         return format_html(
             '<b style="color:{};">{}</b>',
             colors.get(obj.status, "#000"),
             obj.get_status_display()
         )
 
+    @admin.display(description="🧪 Триал")
+    def trial_badge(self, obj):
+        return "🟢 Да" if obj.is_trial else "—"
+
     @admin.display(description="✅ Активна")
     def active_badge(self, obj):
         return "🟢 Да" if obj.is_active else "🔴 Нет"
-    
-
-
 
 
 @admin.register(PaymentEvent)
 class PaymentEventAdmin(admin.ModelAdmin):
 
     list_display = (
-        "user",
+        "user_email",
         "amount_badge",
-        "provider",
+        "method_badge",
         "status_badge",
+        "demo_badge",
         "created_at",
     )
 
     list_filter = (
         "status",
-        "provider",
-        "currency",
+        "method",
+        "is_demo",
     )
 
     search_fields = (
@@ -188,18 +186,17 @@ class PaymentEventAdmin(admin.ModelAdmin):
 
     ordering = ("-created_at",)
 
-    readonly_fields = (
-        "created_at",
-    )
+    readonly_fields = ("created_at",)
 
     fieldsets = (
         ("💰 Платёж", {
             "fields": (
                 "subscription",
-                "provider",
+                "method",
                 "amount",
                 "currency",
                 "status",
+                "is_demo",
             )
         }),
         ("🔧 Технические данные", {
@@ -216,19 +213,20 @@ class PaymentEventAdmin(admin.ModelAdmin):
     )
 
     @admin.display(description="👤 Пользователь")
-    def user(self, obj):
+    def user_email(self, obj):
         return obj.subscription.user.email
 
     @admin.display(description="💰 Сумма")
     def amount_badge(self, obj):
         color = "#27ae60" if obj.status == "success" else "#e74c3c" if obj.status == "failed" else "#f39c12"
-
         return format_html(
             '<b style="color:{};">{} {}</b>',
-            color,
-            obj.amount,
-            obj.currency
+            color, obj.amount, obj.currency
         )
+
+    @admin.display(description="💳 Метод")
+    def method_badge(self, obj):
+        return obj.get_method_display()
 
     @admin.display(description="📡 Статус")
     def status_badge(self, obj):
@@ -237,6 +235,64 @@ class PaymentEventAdmin(admin.ModelAdmin):
             "failed": "🔴",
             "refunded": "↩️",
             "pending": "⏳",
+            "manual": "🤝",
         }
-
         return f"{icons.get(obj.status, '')} {obj.get_status_display()}"
+
+    @admin.display(description="🧪 Демо")
+    def demo_badge(self, obj):
+        return "🟢 Да" if obj.is_demo else "—"
+
+
+@admin.register(TrialPeriod)
+class TrialPeriodAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "user",
+        "active_badge",
+        "started_at",
+        "expires_at",
+        "used_badge",
+    )
+
+    list_filter = (
+        "is_used",
+    )
+
+    search_fields = (
+        "user__email",
+        "user__username",
+    )
+
+    autocomplete_fields = (
+        "user",
+        "subscription",
+    )
+
+    ordering = ("-created_at",)
+
+    fieldsets = (
+        ("🧪 Пробный период", {
+            "fields": (
+                "user",
+                "subscription",
+                "started_at",
+                "expires_at",
+                "is_used",
+            )
+        }),
+    )
+
+    readonly_fields = (
+        "created_at",
+        "started_at",
+        "expires_at",
+    )
+
+    @admin.display(description="✅ Активен")
+    def active_badge(self, obj):
+        return "🟢 Да" if obj.is_active else "🔴 Нет"
+
+    @admin.display(description="📌 Использован")
+    def used_badge(self, obj):
+        return "🟢 Да" if obj.is_used else "—"
