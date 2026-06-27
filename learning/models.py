@@ -12,46 +12,34 @@ class UserPhrase(models.Model):
         ('duel', 'Из дуэли'),
     ]
 
+    STATUS_CHOICES = [
+        ('active', 'Активное'),
+        ('mastered', 'Выучено'),
+    ]
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(
-        'users.User',
-        on_delete=models.CASCADE,
-        related_name='phrases'
-    )
-    language = models.ForeignKey(
-        'languages.Language',
-        on_delete=models.PROTECT,
-        related_name='user_phrases'
-    )
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='phrases')
+    language = models.ForeignKey('languages.Language', on_delete=models.PROTECT, related_name='user_phrases')
+
     word = models.CharField(max_length=150)
     translation = models.CharField(max_length=255)
-    context_sentence = models.TextField(blank=True)
-    note = models.TextField(blank=True)
+    context_sentence = models.TextField(blank=True, default='')
+    note = models.TextField(blank=True, default='')
+
     source = models.CharField(max_length=20, choices=SOURCE_CHOICES, default='manual')
+    category = models.CharField(max_length=100, blank=True, default='')       
 
-    
-    story_word = models.ForeignKey(
-        'stories.StoryWord',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='user_phrases'
-    )
-    grammar_lesson = models.ForeignKey(
-        'grammar.GrammarLesson',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='user_phrases'
-    )
+    story_word = models.ForeignKey('stories.StoryWord', on_delete=models.SET_NULL, null=True, blank=True, related_name='user_phrases')
+    grammar_lesson = models.ForeignKey('grammar.GrammarLesson', on_delete=models.SET_NULL, null=True, blank=True, related_name='user_phrases')
 
-    is_mastered = models.BooleanField(default=False)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='active')
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = 'user_phrases'
-        verbose_name = 'Фраза пользователя'
-        verbose_name_plural = 'Фразы пользователей'
+        verbose_name = 'Слово пользователя'
+        verbose_name_plural = 'Слова пользователей'
         unique_together = ('user', 'word', 'language')
         ordering = ['-created_at']
 
@@ -62,30 +50,22 @@ class UserPhrase(models.Model):
 class ReviewSession(models.Model):
 
     RESULT_CHOICES = [
-        ('again', 'Снова — не помню'),
+        ('again', 'Снова'),
         ('hard', 'Сложно'),
         ('good', 'Хорошо'),
         ('easy', 'Легко'),
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    phrase = models.ForeignKey(
-        UserPhrase,
-        on_delete=models.CASCADE,
-        related_name='review_sessions'
-    )
+    phrase = models.ForeignKey(UserPhrase, on_delete=models.CASCADE, related_name='review_sessions')
 
-    
     easiness_factor = models.FloatField(default=2.5)
     interval_days = models.PositiveIntegerField(default=1)
     repetitions = models.PositiveIntegerField(default=0)
+    consecutive_correct = models.PositiveIntegerField(default=0)
+
     next_review_at = models.DateTimeField(default=timezone.now)
-    last_result = models.CharField(
-        max_length=10,
-        choices=RESULT_CHOICES,
-        null=True,
-        blank=True
-    )
+    last_result = models.CharField(max_length=10, choices=RESULT_CHOICES, null=True, blank=True)
     last_reviewed_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
@@ -99,8 +79,10 @@ class ReviewSession(models.Model):
     def apply_sm2(self, quality: int):
         if quality < 3:
             self.repetitions = 0
+            self.consecutive_correct = 0
             self.interval_days = 1
         else:
+            self.consecutive_correct += 1
             if self.repetitions == 0:
                 self.interval_days = 1
             elif self.repetitions == 1:
