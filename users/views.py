@@ -496,8 +496,8 @@ class FriendshipListView(APIView):
             status='pending',
         )
 
-        # TODO
-        logger.info(f'Запрос в друзья: {request.user.username} → {to_user.username}')
+
+        logger.info(f'Запрос в друзья: {request.user.username} -> {to_user.username}')
         serializer = FriendshipSerializer(friendship)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -536,10 +536,10 @@ class FriendshipActionView(APIView):
         if action == 'accept':
             friendship.status = 'accepted'
             # TODO
-            logger.info(f'Дружба принята: {friendship.from_user.username} ↔ {request.user.username}')
+            logger.info(f'Дружба принята: {friendship.from_user.username} <-> {request.user.username}')
         else:
             friendship.status = 'rejected'
-            logger.info(f'Дружба отклонена: {friendship.from_user.username} → {request.user.username}')
+            logger.info(f'Дружба отклонена: {friendship.from_user.username} -> {request.user.username}')
 
         friendship.save()
         serializer = FriendshipSerializer(friendship)

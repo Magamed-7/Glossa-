@@ -45,5 +45,4 @@ dist/
 build/
 *.egg-info/
 
-glossa_project_schema.md
-implementation_plan.md
+steps
