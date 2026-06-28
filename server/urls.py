@@ -12,7 +12,7 @@ urlpatterns = [
 
     
     path('api/users/', include('users.urls')),
-    # path('api/languages/', include('languages.urls')),
+    path('api/languages/', include('languages.urls')),
     # path('api/subscriptions/', include('subscriptions.urls')),
     # path('api/stories/', include('stories.urls')),
     # path('api/learning/', include('learning.urls')),
