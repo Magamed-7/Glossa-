@@ -15,7 +15,7 @@ urlpatterns = [
     path('api/languages/', include('languages.urls')),
     path('api/subscriptions/', include('subscriptions.urls')),
     path('api/stories/', include('stories.urls')),
-    # path('api/learning/', include('learning.urls')),
+    path('api/learning/', include('learning.urls')),
     # path('api/grammar/', include('grammar.urls')),
     # path('api/ai/', include('ai.urls')),
     # path('api/duels/', include('duels.urls')),
