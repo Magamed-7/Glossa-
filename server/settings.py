@@ -389,6 +389,8 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ALLOW_CREDENTIALS = True
 ANTHROPIC_API_KEY = os.getenv('ANTHROPIC_API_KEY', '')
+AI_MODEL = os.getenv('AI_MODEL', 'claude-sonnet-4-20250514')
+AI_BASE_URL = os.getenv('AI_BASE_URL', 'https://api.anthropic.com')
 
 
 CELERY_BEAT_SCHEDULE = {
