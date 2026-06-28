@@ -18,7 +18,7 @@ urlpatterns = [
     path('api/learning/', include('learning.urls')),
     path('api/grammar/', include('grammar.urls')),
     path('api/ai/', include('ai.urls')),
-    # path('api/duels/', include('duels.urls')),
+    path('api/duels/', include('duels.urls')),
     # path('api/ratings/', include('ratings.urls')),
     # path('api/notifications/', include('notifications.urls')),
     # path('api/reminders/', include('reminders.urls')),
