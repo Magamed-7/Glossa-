@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+
+from rest_framework import serializers as _s
 from .models import Profile, EmailVerification, Friendship, UserLanguage
 
 User = get_user_model()
@@ -115,3 +117,49 @@ class PublicAuthorProfileSerializer(serializers.ModelSerializer):
         if hasattr(obj, 'user_achievements'):
             return obj.user_achievements.count()
         return 0
+    
+
+
+
+
+
+class LoginRequestSerializer(_s.Serializer):
+    email = _s.EmailField(help_text='Email пользователя')
+    password = _s.CharField(help_text='Пароль')
+
+
+class TokenRefreshRequestSerializer(_s.Serializer):
+    refresh = _s.CharField(help_text='Refresh JWT токен')
+
+
+class LogoutRequestSerializer(_s.Serializer):
+    refresh = _s.CharField(help_text='Refresh JWT токен для blacklist')
+
+
+class ChangePasswordRequestSerializer(_s.Serializer):
+    old_password = _s.CharField(help_text='Текущий пароль')
+    new_password = _s.CharField(help_text='Новый пароль (минимум 8 символов)')
+
+
+class ResendVerificationRequestSerializer(_s.Serializer):
+    email = _s.EmailField(help_text='Email для повторной отправки кода')
+
+
+class UpdateAccountRequestSerializer(_s.Serializer):
+    email = _s.EmailField(required=False, help_text='Новый email (требует повторной верификации)')
+    phone = _s.CharField(required=False, help_text='Номер телефона')
+    push_enabled = _s.BooleanField(required=False, help_text='Включить push-уведомления')
+    push_token = _s.CharField(required=False, help_text='Токен для push-уведомлений (Firebase / Web Push)')
+
+
+class FriendshipCreateRequestSerializer(_s.Serializer):
+    to_user = _s.CharField(help_text='Username пользователя, которому отправляем запрос')
+
+
+class FriendshipActionRequestSerializer(_s.Serializer):
+    action = _s.ChoiceField(choices=['accept', 'reject'], help_text='Действие над запросом')
+
+
+class DetailResponseSerializer(_s.Serializer):
+    detail = _s.CharField(help_text='Сообщение о результате')
+

@@ -10,26 +10,29 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from drf_spectacular.utils import extend_schema, OpenApiResponse, inline_serializer
+from drf_spectacular.types import OpenApiTypes
+
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
 
 from .models import Profile, EmailVerification, Friendship, UserLanguage
-from .serializers import (
-    UserRegisterSerializer,
-    EmailVerificationSerializer,
-    UserProfileSerializer,
-    ProfileSerializer,
-    UserLanguageSerializer,
-    FriendshipSerializer,
-    PublicAuthorProfileSerializer,
-)
+from .serializers import *
 
 User = get_user_model()
 logger = logging.getLogger('users')
 
 
 
-
+@extend_schema(
+    request=UserRegisterSerializer,
+    responses={
+        201: OpenApiResponse(description='Регистрация успешна, код отправлен на email'),
+        400: OpenApiResponse(description='Ошибка валидации'),
+    },
+    summary='Регистрация нового пользователя',
+    tags=['users · Auth'],
+)
 class RegisterView(APIView):
     permission_classes = [AllowAny]
 
@@ -58,6 +61,16 @@ class RegisterView(APIView):
         )
 
 
+@extend_schema(
+    request=EmailVerificationSerializer,
+    responses={
+        200: OpenApiResponse(description='Email подтверждён, аккаунт активирован'),
+        400: OpenApiResponse(description='Неверный код / код просрочен / ошибка валидации'),
+        404: OpenApiResponse(description='Пользователь не найден'),
+    },
+    summary='Подтверждение email по 6-значному коду',
+    tags=['users · Auth'],
+)
 class VerifyEmailView(APIView):
     permission_classes = [AllowAny]
 
@@ -111,6 +124,15 @@ class VerifyEmailView(APIView):
         )
 
 
+@extend_schema(
+    request=ResendVerificationRequestSerializer,
+    responses={
+        200: OpenApiResponse(description='Если аккаунт существует, код будет отправлен'),
+        400: OpenApiResponse(description='Email обязателен или аккаунт уже подтверждён'),
+    },
+    summary='Повторная отправка кода подтверждения',
+    tags=['users · Auth'],
+)
 class ResendVerificationCodeView(APIView):
     permission_classes = [AllowAny]
 
@@ -156,6 +178,17 @@ class ResendVerificationCodeView(APIView):
         )
 
 
+@extend_schema(
+    request=LoginRequestSerializer,
+    responses={
+        200: OpenApiResponse(description='JWT токены + данные пользователя'),
+        400: OpenApiResponse(description='Email или пароль не переданы'),
+        401: OpenApiResponse(description='Неверный email или пароль'),
+        403: OpenApiResponse(description='Аккаунт не активен или не подтверждён email'),
+    },
+    summary='Авторизация (получение JWT access + refresh)',
+    tags=['users · Auth'],
+)
 class LoginView(APIView):
     permission_classes = [AllowAny]
 
@@ -218,6 +251,16 @@ class LoginView(APIView):
         )
 
 
+@extend_schema(
+    request=TokenRefreshRequestSerializer,
+    responses={
+        200: OpenApiResponse(description='Новая пара access + refresh токенов'),
+        400: OpenApiResponse(description='Refresh токен обязателен'),
+        401: OpenApiResponse(description='Токен недействителен или истёк'),
+    },
+    summary='Обновление access токена по refresh',
+    tags=['users · Auth'],
+)
 class TokenRefreshView(APIView):
     permission_classes = [AllowAny]
 
@@ -243,6 +286,15 @@ class TokenRefreshView(APIView):
             )
 
 
+@extend_schema(
+    request=LogoutRequestSerializer,
+    responses={
+        200: OpenApiResponse(description='Выход выполнен успешно'),
+        400: OpenApiResponse(description='Токен не передан или недействителен'),
+    },
+    summary='Logout — добавление refresh в blacklist',
+    tags=['users · Auth'],
+)
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -266,6 +318,15 @@ class LogoutView(APIView):
             )
 
 
+@extend_schema(
+    request=ChangePasswordRequestSerializer,
+    responses={
+        200: OpenApiResponse(description='Пароль изменён, все сессии инвалидированы'),
+        400: OpenApiResponse(description='Неверный старый пароль / слишком короткий / поля не переданы'),
+    },
+    summary='Смена пароля текущего пользователя',
+    tags=['users · Auth'],
+)
 class ChangePasswordView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -311,6 +372,11 @@ class ChangePasswordView(APIView):
 
 
 
+@extend_schema(
+    responses={200: UserProfileSerializer},
+    summary='Полный профиль текущего пользователя',
+    tags=['users · Profile'],
+)
 class MeView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -319,6 +385,15 @@ class MeView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+@extend_schema(
+    request=ProfileSerializer,
+    responses={
+        200: ProfileSerializer,
+        400: OpenApiResponse(description='Ошибка валидации'),
+    },
+    summary='Редактирование профиля (ФИО, аватар, био, часовой пояс и т.д.)',
+    tags=['users · Profile'],
+)
 class UpdateProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -332,6 +407,15 @@ class UpdateProfileView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+@extend_schema(
+    request=UpdateAccountRequestSerializer,
+    responses={
+        200: OpenApiResponse(description='Аккаунт обновлён. При смене email — новый код отправлен на новую почту'),
+        400: OpenApiResponse(description='Email уже используется / ошибка валидации'),
+    },
+    summary='Обновление email/phone/push настроек аккаунта',
+    tags=['users · Profile'],
+)
 class UpdateAccountView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -373,6 +457,22 @@ class UpdateAccountView(APIView):
         return Response({'detail': 'Аккаунт обновлён.'}, status=status.HTTP_200_OK)
 
 
+@extend_schema(
+    methods=['GET'],
+    responses={200: UserLanguageSerializer(many=True)},
+    summary='Список изучаемых языков пользователя',
+    tags=['users · Languages'],
+)
+@extend_schema(
+    methods=['POST'],
+    request=UserLanguageSerializer,
+    responses={
+        201: UserLanguageSerializer,
+        400: OpenApiResponse(description='Язык уже добавлен / ошибка валидации'),
+    },
+    summary='Добавить язык в список изучаемых',
+    tags=['users · Languages'],
+)
 class UserLanguageListView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -398,6 +498,16 @@ class UserLanguageListView(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+@extend_schema(
+    request=UserLanguageSerializer,
+    responses={
+        200: UserLanguageSerializer,
+        400: OpenApiResponse(description='Ошибка валидации'),
+        404: OpenApiResponse(description='Язык не найден'),
+    },
+    summary='Обновить уровень / настройку видимости уровня для языка',
+    tags=['users · Languages'],
+)
 class UserLanguageDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -434,6 +544,12 @@ class UserLanguageDetailView(APIView):
 
 
 
+@extend_schema(
+    methods=['GET'],
+    responses={200: PublicAuthorProfileSerializer},
+    summary='Публичный профиль автора по username',
+    tags=['users · Public'],
+)
 class PublicAuthorProfileView(APIView):
     permission_classes = [AllowAny]
 
@@ -450,6 +566,23 @@ class PublicAuthorProfileView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+@extend_schema(
+    methods=['GET'],
+    responses={200: FriendshipSerializer(many=True)},
+    summary='Список принятых друзей',
+    tags=['users · Friends'],
+)
+@extend_schema(
+    methods=['POST'],
+    request=FriendshipCreateRequestSerializer,
+    responses={
+        201: FriendshipSerializer,
+        400: OpenApiResponse(description='Нельзя добавить себя / запрос уже отправлен'),
+        404: OpenApiResponse(description='Пользователь не найден'),
+    },
+    summary='Отправить запрос в друзья',
+    tags=['users · Friends'],
+)
 class FriendshipListView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -502,6 +635,11 @@ class FriendshipListView(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+@extend_schema(
+    responses={200: FriendshipSerializer(many=True)},
+    summary='Входящие запросы в друзья (статус pending)',
+    tags=['users · Friends'],
+)
 class FriendshipIncomingView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -514,6 +652,16 @@ class FriendshipIncomingView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+@extend_schema(
+    request=FriendshipActionRequestSerializer,
+    responses={
+        200: FriendshipSerializer,
+        400: OpenApiResponse(description='Действие должно быть accept или reject'),
+        404: OpenApiResponse(description='Запрос в друзья не найден'),
+    },
+    summary='Принять или отклонить входящий запрос в друзья',
+    tags=['users · Friends'],
+)
 class FriendshipActionView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -546,6 +694,15 @@ class FriendshipActionView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+@extend_schema(
+    responses={
+        204: OpenApiResponse(description='Друг удалён'),
+        403: OpenApiResponse(description='Вы не можете удалить эту дружбу'),
+        404: OpenApiResponse(description='Дружба не найдена'),
+    },
+    summary='Удалить пользователя из списка друзей',
+    tags=['users · Friends'],
+)
 class FriendshipDeleteView(APIView):
     permission_classes = [IsAuthenticated]
 
