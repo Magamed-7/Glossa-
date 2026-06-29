@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+
 from drf_spectacular.utils import extend_schema, OpenApiResponse, inline_serializer
 from drf_spectacular.types import OpenApiTypes
 
@@ -557,7 +558,6 @@ class PublicAuthorProfileView(APIView):
         try:
             user = User.objects.select_related('profile').prefetch_related(
                 'user_languages',
-                'user_achievements',
             ).get(username=username, is_active=True)
         except User.DoesNotExist:
             return Response({'detail': 'Пользователь не найден.'}, status=status.HTTP_404_NOT_FOUND)

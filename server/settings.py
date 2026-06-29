@@ -133,11 +133,12 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 
     'ALGORITHM': 'HS256',
-    
+
     'SIGNING_KEY': SECRET_KEY,
     'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'user_id',
 }
+APPEND_SLASH = False
 
 
 
