@@ -14,6 +14,9 @@ from pathlib import Path
 from datetime import timedelta
 from celery.schedules import crontab
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -209,12 +212,21 @@ AUTH_USER_MODEL = 'users.User'
 
 
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/1'),
+
+if os.getenv('REDIS_URL'):
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': os.environ['REDIS_URL'],
+        }
     }
-}
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'glossa-locmem',
+        }
+    }
 
 
 
@@ -420,6 +432,12 @@ ANTHROPIC_API_KEY = os.getenv('ANTHROPIC_API_KEY', '')
 AI_MODEL = os.getenv('AI_MODEL', 'claude-sonnet-4-20250514')
 AI_BASE_URL = os.getenv('AI_BASE_URL', 'https://api.anthropic.com')
 
+CLAUDE_API_KEYS = [v for k, v in os.environ.items() if k.startswith('CLAUDE_API_KEY_') and v]
+GEMINI_API_KEYS = [v for k, v in os.environ.items() if k.startswith('GEMINI_API_KEY_') and v]
+GROQ_API_KEYS = [v for k, v in os.environ.items() if k.startswith('GROQ_API_KEY_') and v]
+DEEPSEEK_API_KEYS = [v for k, v in os.environ.items() if k.startswith('DEEPSEEK_API_KEY_') and v]
+OPENAI_API_KEYS = [v for k, v in os.environ.items() if k.startswith('OPENAI_API_KEY_') and v]
+
 
 CELERY_BEAT_SCHEDULE = {
     'daily-review-reminders': {
@@ -435,3 +453,11 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': crontab(hour=11, minute=0),
     },
 }
+
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', '587'))
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True').lower() == 'true'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER or 'noreply@glossa.tj')

@@ -8,9 +8,9 @@ from .views import (
 app_name = 'languages'
 
 urlpatterns = [
-    path('', LanguageListView.as_view(), name='language-list'),
-
-    path('<str:lang_code>/levels/', CEFRLevelListView.as_view(), name='cefr-levels'),
-
-    path('<str:lang_code>/toggle/', AdminLanguageToggleView.as_view(), name='language-toggle'),
+    path('',                          LanguageListView.as_view(),       name='language-list'),
+    path('<str:lang_code>/levels',    CEFRLevelListView.as_view(),      name='cefr-levels'),
+    path('<str:lang_code>/levels/',   CEFRLevelListView.as_view()),
+    path('<str:lang_code>/toggle',    AdminLanguageToggleView.as_view(), name='language-toggle'),
+    path('<str:lang_code>/toggle/',   AdminLanguageToggleView.as_view()),
 ]

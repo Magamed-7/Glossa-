@@ -4,6 +4,8 @@ from datetime import timedelta
 
 from django.contrib.auth import get_user_model
 from django.utils import timezone
+from django.core.mail import send_mail
+from django.conf import settings
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -22,6 +24,20 @@ from .serializers import *
 
 User = get_user_model()
 logger = logging.getLogger('users')
+
+
+def _send_verification_email(email, code):
+    try:
+        send_mail(
+            subject='Glossa — подтверждение email',
+            message=f'Ваш код подтверждения: {code}\n\nКод действителен 10 минут.',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[email],
+            fail_silently=True,
+        )
+        logger.info(f'Код верификации отправлен на {email}: {code}')
+    except Exception as e:
+        logger.error(f'Ошибка отправки email на {email}: {e}', exc_info=True)
 
 
 
@@ -52,8 +68,7 @@ class RegisterView(APIView):
             expires_at=timezone.now() + timedelta(minutes=10),
         )
 
-        # TODO
-        logger.info(f'[DEV] Код верификации для {user.email}: {code}')
+        _send_verification_email(user.email, code)
 
         logger.info(f'Новый пользователь зарегистрирован: {user.email}')
         return Response(
@@ -170,8 +185,7 @@ class ResendVerificationCodeView(APIView):
             expires_at=timezone.now() + timedelta(minutes=10),
         )
 
-        # TODO
-        logger.info(f'[DEV] Новый код верификации для {user.email}: {code}')
+        _send_verification_email(user.email, code)
 
         return Response(
             {'detail': 'Если аккаунт существует, код будет отправлен.'},
@@ -443,8 +457,7 @@ class UpdateAccountView(APIView):
                 code=code,
                 expires_at=timezone.now() + timedelta(minutes=10),
             )
-            # TODO
-            logger.info(f'[DEV] Код верификации нового email {new_email}: {code}')
+            _send_verification_email(new_email, code)
 
         if 'phone' in data:
             user.phone = data['phone']

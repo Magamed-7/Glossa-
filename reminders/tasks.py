@@ -1,12 +1,10 @@
 from celery import shared_task
 from django.utils import timezone
 import logging
-from .models import Reminder
+from .models import Reminder, ReminderSchedule
 from users.models import User
 from learning.models import ReviewSession
-from .models import Reminder, ReminderSchedule
 from subscriptions.models import Subscription
-from .models import Reminder
 
 
 logger = logging.getLogger('reminders')
@@ -25,7 +23,7 @@ def send_daily_review_reminders():
                 due_count = ReviewSession.objects.filter(
                     phrase__user=schedule.user,
                     next_review_at__lte=timezone.now(),
-                    phrase__is_mastered=False
+                    phrase__status='active'
                 ).count()
 
                 if due_count == 0:

@@ -23,3 +23,11 @@ class IsModerator(BasePermission):
             request.user.is_authenticated and
             request.user.dashboard_role in ['superadmin', 'moderator']
         )
+
+class IsAnalyst(BasePermission):
+    def has_permission(self, request, view):
+        return (
+            request.user and
+            request.user.is_authenticated and
+            request.user.dashboard_role in ['superadmin', 'analyst']
+        )

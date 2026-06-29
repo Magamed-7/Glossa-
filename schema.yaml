@@ -1,0 +1,3757 @@
+openapi: 3.0.3
+info:
+  title: Second grade products
+  version: 2.0.0
+  description: Very good products
+paths:
+  /api/ai/explain-word/:
+    post:
+      operationId: ai_explain_word_create
+      tags:
+      - ai
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/ai/generate-story/:
+    post:
+      operationId: ai_generate_story_create
+      tags:
+      - ai
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/aiexplain-word/:
+    post:
+      operationId: aiexplain_word_create
+      tags:
+      - aiexplain-word
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/aigenerate-story/:
+    post:
+      operationId: aigenerate_story_create
+      tags:
+      - aigenerate-story
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/duels{duel_id}/:
+    get:
+      operationId: duels_retrieve_2
+      parameters:
+      - in: path
+        name: duel_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - duels
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/duels{duel_id}/result/:
+    get:
+      operationId: duels_result_retrieve_2
+      parameters:
+      - in: path
+        name: duel_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - duels
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/duels/{duel_id}/:
+    get:
+      operationId: duels_retrieve
+      parameters:
+      - in: path
+        name: duel_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - duels
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/duels/{duel_id}/result/:
+    get:
+      operationId: duels_result_retrieve
+      parameters:
+      - in: path
+        name: duel_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - duels
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/duels/ai/:
+    post:
+      operationId: duels_ai_create
+      tags:
+      - duels
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/duels/create/:
+    post:
+      operationId: duels_create_create
+      tags:
+      - duels
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/duels/history/:
+    get:
+      operationId: duels_history_retrieve
+      tags:
+      - duels
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/duelsai/:
+    post:
+      operationId: duelsai_create
+      tags:
+      - duelsai
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/duelscreate/:
+    post:
+      operationId: duelscreate_create
+      tags:
+      - duelscreate
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/duelshistory/:
+    get:
+      operationId: duelshistory_retrieve
+      tags:
+      - duelshistory
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/grammar/bookmarks/:
+    get:
+      operationId: grammar_bookmarks_retrieve
+      tags:
+      - grammar
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: grammar_bookmarks_create
+      tags:
+      - grammar
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/grammar/bookmarks/{id}/:
+    delete:
+      operationId: grammar_bookmarks_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - grammar
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/grammar/lessons/:
+    get:
+      operationId: grammar_lessons_retrieve
+      tags:
+      - grammar
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/grammar/lessons/{id}/:
+    get:
+      operationId: grammar_lessons_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - grammar
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/grammar/lessons/{id}/submit/:
+    post:
+      operationId: grammar_lessons_submit_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - grammar
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/grammarbookmarks/:
+    get:
+      operationId: grammarbookmarks_retrieve
+      tags:
+      - grammarbookmarks
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: grammarbookmarks_create
+      tags:
+      - grammarbookmarks
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/grammarbookmarks/{id}/:
+    delete:
+      operationId: grammarbookmarks_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - grammarbookmarks
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/grammarlessons/:
+    get:
+      operationId: grammarlessons_retrieve
+      tags:
+      - grammarlessons
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/grammarlessons/{id}/:
+    get:
+      operationId: grammarlessons_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - grammarlessons
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/grammarlessons/{id}/submit/:
+    post:
+      operationId: grammarlessons_submit_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - grammarlessons
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/languages:
+    get:
+      operationId: languages_list
+      summary: Список активных языков с уровнями CEFR (кэш 1 час)
+      tags:
+      - languages · Catalog
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Language'
+          description: ''
+  /api/languages/:
+    get:
+      operationId: languages_list_2
+      summary: Список активных языков с уровнями CEFR (кэш 1 час)
+      tags:
+      - languages · Catalog
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Language'
+          description: ''
+  /api/languages{lang_code}/levels:
+    get:
+      operationId: languages_levels_list_3
+      summary: Список уровней CEFR (A1–C2) для указанного языка
+      parameters:
+      - in: path
+        name: lang_code
+        schema:
+          type: string
+        description: Код языка (например en, ru, de, tj).
+        required: true
+      tags:
+      - languages · Catalog
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CEFRLevel'
+          description: ''
+        '404':
+          description: Язык не найден или деактивирован
+  /api/languages{lang_code}/levels/:
+    get:
+      operationId: languages_levels_list_4
+      summary: Список уровней CEFR (A1–C2) для указанного языка
+      parameters:
+      - in: path
+        name: lang_code
+        schema:
+          type: string
+        description: Код языка (например en, ru, de, tj).
+        required: true
+      tags:
+      - languages · Catalog
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CEFRLevel'
+          description: ''
+        '404':
+          description: Язык не найден или деактивирован
+  /api/languages{lang_code}/toggle:
+    patch:
+      operationId: languages_toggle_partial_update_3
+      summary: Активировать / деактивировать язык (только moderator/superadmin)
+      parameters:
+      - in: path
+        name: lang_code
+        schema:
+          type: string
+        description: Код языка (например en, ru, de, tj).
+        required: true
+      tags:
+      - languages · Admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLanguageToggleRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedLanguageToggleRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedLanguageToggleRequest'
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    description: Человекочитаемое описание результата операции.
+                  is_active:
+                    type: boolean
+                    description: Новое значение флага активности языка.
+                  code:
+                    type: string
+                    description: Код языка.
+                  name:
+                    type: string
+                    description: Название языка.
+                required:
+                - detail
+                - is_active
+                - code
+                - name
+          description: Язык успешно переключён
+        '401':
+          description: Не авторизован
+        '403':
+          description: Недостаточно прав (нужна роль moderator/superadmin)
+        '404':
+          description: Язык не найден
+  /api/languages{lang_code}/toggle/:
+    patch:
+      operationId: languages_toggle_partial_update_4
+      summary: Активировать / деактивировать язык (только moderator/superadmin)
+      parameters:
+      - in: path
+        name: lang_code
+        schema:
+          type: string
+        description: Код языка (например en, ru, de, tj).
+        required: true
+      tags:
+      - languages · Admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLanguageToggleRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedLanguageToggleRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedLanguageToggleRequest'
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    description: Человекочитаемое описание результата операции.
+                  is_active:
+                    type: boolean
+                    description: Новое значение флага активности языка.
+                  code:
+                    type: string
+                    description: Код языка.
+                  name:
+                    type: string
+                    description: Название языка.
+                required:
+                - detail
+                - is_active
+                - code
+                - name
+          description: Язык успешно переключён
+        '401':
+          description: Не авторизован
+        '403':
+          description: Недостаточно прав (нужна роль moderator/superadmin)
+        '404':
+          description: Язык не найден
+  /api/languages/{lang_code}/levels:
+    get:
+      operationId: languages_levels_list
+      summary: Список уровней CEFR (A1–C2) для указанного языка
+      parameters:
+      - in: path
+        name: lang_code
+        schema:
+          type: string
+        description: Код языка (например en, ru, de, tj).
+        required: true
+      tags:
+      - languages · Catalog
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CEFRLevel'
+          description: ''
+        '404':
+          description: Язык не найден или деактивирован
+  /api/languages/{lang_code}/levels/:
+    get:
+      operationId: languages_levels_list_2
+      summary: Список уровней CEFR (A1–C2) для указанного языка
+      parameters:
+      - in: path
+        name: lang_code
+        schema:
+          type: string
+        description: Код языка (например en, ru, de, tj).
+        required: true
+      tags:
+      - languages · Catalog
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CEFRLevel'
+          description: ''
+        '404':
+          description: Язык не найден или деактивирован
+  /api/languages/{lang_code}/toggle:
+    patch:
+      operationId: languages_toggle_partial_update
+      summary: Активировать / деактивировать язык (только moderator/superadmin)
+      parameters:
+      - in: path
+        name: lang_code
+        schema:
+          type: string
+        description: Код языка (например en, ru, de, tj).
+        required: true
+      tags:
+      - languages · Admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLanguageToggleRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedLanguageToggleRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedLanguageToggleRequest'
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    description: Человекочитаемое описание результата операции.
+                  is_active:
+                    type: boolean
+                    description: Новое значение флага активности языка.
+                  code:
+                    type: string
+                    description: Код языка.
+                  name:
+                    type: string
+                    description: Название языка.
+                required:
+                - detail
+                - is_active
+                - code
+                - name
+          description: Язык успешно переключён
+        '401':
+          description: Не авторизован
+        '403':
+          description: Недостаточно прав (нужна роль moderator/superadmin)
+        '404':
+          description: Язык не найден
+  /api/languages/{lang_code}/toggle/:
+    patch:
+      operationId: languages_toggle_partial_update_2
+      summary: Активировать / деактивировать язык (только moderator/superadmin)
+      parameters:
+      - in: path
+        name: lang_code
+        schema:
+          type: string
+        description: Код языка (например en, ru, de, tj).
+        required: true
+      tags:
+      - languages · Admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLanguageToggleRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedLanguageToggleRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedLanguageToggleRequest'
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    description: Человекочитаемое описание результата операции.
+                  is_active:
+                    type: boolean
+                    description: Новое значение флага активности языка.
+                  code:
+                    type: string
+                    description: Код языка.
+                  name:
+                    type: string
+                    description: Название языка.
+                required:
+                - detail
+                - is_active
+                - code
+                - name
+          description: Язык успешно переключён
+        '401':
+          description: Не авторизован
+        '403':
+          description: Недостаточно прав (нужна роль moderator/superadmin)
+        '404':
+          description: Язык не найден
+  /api/learning/deck/:
+    get:
+      operationId: learning_deck_retrieve
+      tags:
+      - learning
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/learning/deck/add/:
+    post:
+      operationId: learning_deck_add_create
+      tags:
+      - learning
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/learning/mastered/:
+    get:
+      operationId: learning_mastered_retrieve
+      tags:
+      - learning
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/learning/mastered/{id}/restart/:
+    post:
+      operationId: learning_mastered_restart_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - learning
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/learning/review/:
+    get:
+      operationId: learning_review_retrieve
+      tags:
+      - learning
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/learning/review/{id}/submit/:
+    post:
+      operationId: learning_review_submit_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - learning
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/learningdeck/:
+    get:
+      operationId: learningdeck_retrieve
+      tags:
+      - learningdeck
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/learningdeck/add/:
+    post:
+      operationId: learningdeck_add_create
+      tags:
+      - learningdeck
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/learningmastered/:
+    get:
+      operationId: learningmastered_retrieve
+      tags:
+      - learningmastered
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/learningmastered/{id}/restart/:
+    post:
+      operationId: learningmastered_restart_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - learningmastered
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/learningreview/:
+    get:
+      operationId: learningreview_retrieve
+      tags:
+      - learningreview
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/learningreview/{id}/submit/:
+    post:
+      operationId: learningreview_submit_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - learningreview
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/stories:
+    get:
+      operationId: stories_retrieve
+      tags:
+      - stories
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/stories/:
+    get:
+      operationId: stories_retrieve_2
+      tags:
+      - stories
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/stories{id}/:
+    get:
+      operationId: stories_retrieve_4
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - stories
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/stories{id}/ai-assist/:
+    post:
+      operationId: stories_ai_assist_create_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - stories
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/stories/{id}/:
+    get:
+      operationId: stories_retrieve_3
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - stories
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/stories/{id}/ai-assist/:
+    post:
+      operationId: stories_ai_assist_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - stories
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/stories/create/:
+    post:
+      operationId: stories_create_create
+      tags:
+      - stories
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/storiescreate/:
+    post:
+      operationId: storiescreate_create
+      tags:
+      - storiescreate
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/subscriptions/demo-pay/:
+    post:
+      operationId: subscriptions_demo_pay_create
+      tags:
+      - subscriptions
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/subscriptions/my/:
+    get:
+      operationId: subscriptions_my_retrieve
+      tags:
+      - subscriptions
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/subscriptions/pay/:
+    post:
+      operationId: subscriptions_pay_create
+      tags:
+      - subscriptions
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/subscriptions/plans/:
+    get:
+      operationId: subscriptions_plans_retrieve
+      tags:
+      - subscriptions
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/subscriptions/trial/activate/:
+    post:
+      operationId: subscriptions_trial_activate_create
+      tags:
+      - subscriptions
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/subscriptionsdemo-pay/:
+    post:
+      operationId: subscriptionsdemo_pay_create
+      tags:
+      - subscriptionsdemo-pay
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/subscriptionsmy/:
+    get:
+      operationId: subscriptionsmy_retrieve
+      tags:
+      - subscriptionsmy
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/subscriptionspay/:
+    post:
+      operationId: subscriptionspay_create
+      tags:
+      - subscriptionspay
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/subscriptionsplans/:
+    get:
+      operationId: subscriptionsplans_retrieve
+      tags:
+      - subscriptionsplans
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/subscriptionstrial/activate/:
+    post:
+      operationId: subscriptionstrial_activate_create
+      tags:
+      - subscriptionstrial
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/users{username}:
+    get:
+      operationId: users_retrieve_3
+      summary: Публичный профиль автора по username
+      parameters:
+      - in: path
+        name: username
+        schema:
+          type: string
+        required: true
+      tags:
+      - users · Public
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAuthorProfile'
+          description: ''
+  /api/users{username}/:
+    get:
+      operationId: users_retrieve_4
+      summary: Публичный профиль автора по username
+      parameters:
+      - in: path
+        name: username
+        schema:
+          type: string
+        required: true
+      tags:
+      - users · Public
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAuthorProfile'
+          description: ''
+  /api/users/{username}:
+    get:
+      operationId: users_retrieve
+      summary: Публичный профиль автора по username
+      parameters:
+      - in: path
+        name: username
+        schema:
+          type: string
+        required: true
+      tags:
+      - users · Public
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAuthorProfile'
+          description: ''
+  /api/users/{username}/:
+    get:
+      operationId: users_retrieve_2
+      summary: Публичный профиль автора по username
+      parameters:
+      - in: path
+        name: username
+        schema:
+          type: string
+        required: true
+      tags:
+      - users · Public
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAuthorProfile'
+          description: ''
+  /api/users/change-password:
+    post:
+      operationId: users_change_password_create
+      summary: Смена пароля текущего пользователя
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Пароль изменён, все сессии инвалидированы
+        '400':
+          description: Неверный старый пароль / слишком короткий / поля не переданы
+  /api/users/change-password/:
+    post:
+      operationId: users_change_password_create_2
+      summary: Смена пароля текущего пользователя
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Пароль изменён, все сессии инвалидированы
+        '400':
+          description: Неверный старый пароль / слишком короткий / поля не переданы
+  /api/users/friends:
+    get:
+      operationId: users_friends_list
+      summary: Список принятых друзей
+      tags:
+      - users · Friends
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Friendship'
+          description: ''
+    post:
+      operationId: users_friends_create
+      summary: Отправить запрос в друзья
+      tags:
+      - users · Friends
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FriendshipCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FriendshipCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FriendshipCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Friendship'
+          description: ''
+        '400':
+          description: Нельзя добавить себя / запрос уже отправлен
+        '404':
+          description: Пользователь не найден
+  /api/users/friends/:
+    get:
+      operationId: users_friends_list_2
+      summary: Список принятых друзей
+      tags:
+      - users · Friends
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Friendship'
+          description: ''
+    post:
+      operationId: users_friends_create_2
+      summary: Отправить запрос в друзья
+      tags:
+      - users · Friends
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FriendshipCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FriendshipCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FriendshipCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Friendship'
+          description: ''
+        '400':
+          description: Нельзя добавить себя / запрос уже отправлен
+        '404':
+          description: Пользователь не найден
+  /api/users/friends/{id}/action:
+    patch:
+      operationId: users_friends_action_partial_update
+      summary: Принять или отклонить входящий запрос в друзья
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - users · Friends
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedFriendshipActionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedFriendshipActionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedFriendshipActionRequest'
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Friendship'
+          description: ''
+        '400':
+          description: Действие должно быть accept или reject
+        '404':
+          description: Запрос в друзья не найден
+  /api/users/friends/{id}/action/:
+    patch:
+      operationId: users_friends_action_partial_update_2
+      summary: Принять или отклонить входящий запрос в друзья
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - users · Friends
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedFriendshipActionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedFriendshipActionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedFriendshipActionRequest'
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Friendship'
+          description: ''
+        '400':
+          description: Действие должно быть accept или reject
+        '404':
+          description: Запрос в друзья не найден
+  /api/users/friends/{id}/delete:
+    delete:
+      operationId: users_friends_delete_destroy
+      summary: Удалить пользователя из списка друзей
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - users · Friends
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '204':
+          description: Друг удалён
+        '403':
+          description: Вы не можете удалить эту дружбу
+        '404':
+          description: Дружба не найдена
+  /api/users/friends/{id}/delete/:
+    delete:
+      operationId: users_friends_delete_destroy_2
+      summary: Удалить пользователя из списка друзей
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - users · Friends
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '204':
+          description: Друг удалён
+        '403':
+          description: Вы не можете удалить эту дружбу
+        '404':
+          description: Дружба не найдена
+  /api/users/friends/incoming:
+    get:
+      operationId: users_friends_incoming_list
+      summary: Входящие запросы в друзья (статус pending)
+      tags:
+      - users · Friends
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Friendship'
+          description: ''
+  /api/users/friends/incoming/:
+    get:
+      operationId: users_friends_incoming_list_2
+      summary: Входящие запросы в друзья (статус pending)
+      tags:
+      - users · Friends
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Friendship'
+          description: ''
+  /api/users/login:
+    post:
+      operationId: users_login_create
+      summary: Авторизация (получение JWT access + refresh)
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          description: JWT токены + данные пользователя
+        '400':
+          description: Email или пароль не переданы
+        '401':
+          description: Неверный email или пароль
+        '403':
+          description: Аккаунт не активен или не подтверждён email
+  /api/users/login/:
+    post:
+      operationId: users_login_create_2
+      summary: Авторизация (получение JWT access + refresh)
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          description: JWT токены + данные пользователя
+        '400':
+          description: Email или пароль не переданы
+        '401':
+          description: Неверный email или пароль
+        '403':
+          description: Аккаунт не активен или не подтверждён email
+  /api/users/logout:
+    post:
+      operationId: users_logout_create
+      summary: Logout — добавление refresh в blacklist
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Выход выполнен успешно
+        '400':
+          description: Токен не передан или недействителен
+  /api/users/logout/:
+    post:
+      operationId: users_logout_create_2
+      summary: Logout — добавление refresh в blacklist
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Выход выполнен успешно
+        '400':
+          description: Токен не передан или недействителен
+  /api/users/me:
+    get:
+      operationId: users_me_retrieve
+      summary: Полный профиль текущего пользователя
+      tags:
+      - users · Profile
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+  /api/users/me/:
+    get:
+      operationId: users_me_retrieve_2
+      summary: Полный профиль текущего пользователя
+      tags:
+      - users · Profile
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+  /api/users/me/account:
+    patch:
+      operationId: users_me_account_partial_update
+      summary: Обновление email/phone/push настроек аккаунта
+      tags:
+      - users · Profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateAccountRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateAccountRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateAccountRequest'
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Аккаунт обновлён. При смене email — новый код отправлен на
+            новую почту
+        '400':
+          description: Email уже используется / ошибка валидации
+  /api/users/me/account/:
+    patch:
+      operationId: users_me_account_partial_update_2
+      summary: Обновление email/phone/push настроек аккаунта
+      tags:
+      - users · Profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateAccountRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateAccountRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateAccountRequest'
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Аккаунт обновлён. При смене email — новый код отправлен на
+            новую почту
+        '400':
+          description: Email уже используется / ошибка валидации
+  /api/users/me/languages:
+    get:
+      operationId: users_me_languages_list
+      summary: Список изучаемых языков пользователя
+      tags:
+      - users · Languages
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserLanguage'
+          description: ''
+    post:
+      operationId: users_me_languages_create
+      summary: Добавить язык в список изучаемых
+      tags:
+      - users · Languages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLanguage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserLanguage'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserLanguage'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLanguage'
+          description: ''
+        '400':
+          description: Язык уже добавлен / ошибка валидации
+  /api/users/me/languages/:
+    get:
+      operationId: users_me_languages_list_2
+      summary: Список изучаемых языков пользователя
+      tags:
+      - users · Languages
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserLanguage'
+          description: ''
+    post:
+      operationId: users_me_languages_create_2
+      summary: Добавить язык в список изучаемых
+      tags:
+      - users · Languages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLanguage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserLanguage'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserLanguage'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLanguage'
+          description: ''
+        '400':
+          description: Язык уже добавлен / ошибка валидации
+  /api/users/me/languages/{id}:
+    patch:
+      operationId: users_me_languages_partial_update
+      summary: Обновить уровень / настройку видимости уровня для языка
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - users · Languages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserLanguage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserLanguage'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserLanguage'
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLanguage'
+          description: ''
+        '400':
+          description: Ошибка валидации
+        '404':
+          description: Язык не найден
+    delete:
+      operationId: users_me_languages_destroy
+      summary: Обновить уровень / настройку видимости уровня для языка
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - users · Languages
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLanguage'
+          description: ''
+        '400':
+          description: Ошибка валидации
+        '404':
+          description: Язык не найден
+  /api/users/me/languages/{id}/:
+    patch:
+      operationId: users_me_languages_partial_update_2
+      summary: Обновить уровень / настройку видимости уровня для языка
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - users · Languages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserLanguage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserLanguage'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserLanguage'
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLanguage'
+          description: ''
+        '400':
+          description: Ошибка валидации
+        '404':
+          description: Язык не найден
+    delete:
+      operationId: users_me_languages_destroy_2
+      summary: Обновить уровень / настройку видимости уровня для языка
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - users · Languages
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLanguage'
+          description: ''
+        '400':
+          description: Ошибка валидации
+        '404':
+          description: Язык не найден
+  /api/users/me/profile:
+    patch:
+      operationId: users_me_profile_partial_update
+      summary: Редактирование профиля (ФИО, аватар, био, часовой пояс и т.д.)
+      tags:
+      - users · Profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProfile'
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: ''
+        '400':
+          description: Ошибка валидации
+  /api/users/me/profile/:
+    patch:
+      operationId: users_me_profile_partial_update_2
+      summary: Редактирование профиля (ФИО, аватар, био, часовой пояс и т.д.)
+      tags:
+      - users · Profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProfile'
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: ''
+        '400':
+          description: Ошибка валидации
+  /api/users/register:
+    post:
+      operationId: users_register_create
+      summary: Регистрация нового пользователя
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '201':
+          description: Регистрация успешна, код отправлен на email
+        '400':
+          description: Ошибка валидации
+  /api/users/register/:
+    post:
+      operationId: users_register_create_2
+      summary: Регистрация нового пользователя
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '201':
+          description: Регистрация успешна, код отправлен на email
+        '400':
+          description: Ошибка валидации
+  /api/users/resend-verification:
+    post:
+      operationId: users_resend_verification_create
+      summary: Повторная отправка кода подтверждения
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendVerificationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResendVerificationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResendVerificationRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          description: Если аккаунт существует, код будет отправлен
+        '400':
+          description: Email обязателен или аккаунт уже подтверждён
+  /api/users/resend-verification/:
+    post:
+      operationId: users_resend_verification_create_2
+      summary: Повторная отправка кода подтверждения
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendVerificationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResendVerificationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResendVerificationRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          description: Если аккаунт существует, код будет отправлен
+        '400':
+          description: Email обязателен или аккаунт уже подтверждён
+  /api/users/token/refresh:
+    post:
+      operationId: users_token_refresh_create
+      summary: Обновление access токена по refresh
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          description: Новая пара access + refresh токенов
+        '400':
+          description: Refresh токен обязателен
+        '401':
+          description: Токен недействителен или истёк
+  /api/users/token/refresh/:
+    post:
+      operationId: users_token_refresh_create_2
+      summary: Обновление access токена по refresh
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          description: Новая пара access + refresh токенов
+        '400':
+          description: Refresh токен обязателен
+        '401':
+          description: Токен недействителен или истёк
+  /api/users/verify-email:
+    post:
+      operationId: users_verify_email_create
+      summary: Подтверждение email по 6-значному коду
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailVerification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EmailVerification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EmailVerification'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          description: Email подтверждён, аккаунт активирован
+        '400':
+          description: Неверный код / код просрочен / ошибка валидации
+        '404':
+          description: Пользователь не найден
+  /api/users/verify-email/:
+    post:
+      operationId: users_verify_email_create_2
+      summary: Подтверждение email по 6-значному коду
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailVerification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EmailVerification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EmailVerification'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          description: Email подтверждён, аккаунт активирован
+        '400':
+          description: Неверный код / код просрочен / ошибка валидации
+        '404':
+          description: Пользователь не найден
+  /api/userschange-password:
+    post:
+      operationId: userschange_password_create
+      summary: Смена пароля текущего пользователя
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Пароль изменён, все сессии инвалидированы
+        '400':
+          description: Неверный старый пароль / слишком короткий / поля не переданы
+  /api/userschange-password/:
+    post:
+      operationId: userschange_password_create_2
+      summary: Смена пароля текущего пользователя
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Пароль изменён, все сессии инвалидированы
+        '400':
+          description: Неверный старый пароль / слишком короткий / поля не переданы
+  /api/usersfriends:
+    get:
+      operationId: usersfriends_list
+      summary: Список принятых друзей
+      tags:
+      - users · Friends
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Friendship'
+          description: ''
+    post:
+      operationId: usersfriends_create
+      summary: Отправить запрос в друзья
+      tags:
+      - users · Friends
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FriendshipCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FriendshipCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FriendshipCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Friendship'
+          description: ''
+        '400':
+          description: Нельзя добавить себя / запрос уже отправлен
+        '404':
+          description: Пользователь не найден
+  /api/usersfriends/:
+    get:
+      operationId: usersfriends_list_2
+      summary: Список принятых друзей
+      tags:
+      - users · Friends
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Friendship'
+          description: ''
+    post:
+      operationId: usersfriends_create_2
+      summary: Отправить запрос в друзья
+      tags:
+      - users · Friends
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FriendshipCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FriendshipCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FriendshipCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Friendship'
+          description: ''
+        '400':
+          description: Нельзя добавить себя / запрос уже отправлен
+        '404':
+          description: Пользователь не найден
+  /api/usersfriends/{id}/action:
+    patch:
+      operationId: usersfriends_action_partial_update
+      summary: Принять или отклонить входящий запрос в друзья
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - users · Friends
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedFriendshipActionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedFriendshipActionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedFriendshipActionRequest'
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Friendship'
+          description: ''
+        '400':
+          description: Действие должно быть accept или reject
+        '404':
+          description: Запрос в друзья не найден
+  /api/usersfriends/{id}/action/:
+    patch:
+      operationId: usersfriends_action_partial_update_2
+      summary: Принять или отклонить входящий запрос в друзья
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - users · Friends
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedFriendshipActionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedFriendshipActionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedFriendshipActionRequest'
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Friendship'
+          description: ''
+        '400':
+          description: Действие должно быть accept или reject
+        '404':
+          description: Запрос в друзья не найден
+  /api/usersfriends/{id}/delete:
+    delete:
+      operationId: usersfriends_delete_destroy
+      summary: Удалить пользователя из списка друзей
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - users · Friends
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '204':
+          description: Друг удалён
+        '403':
+          description: Вы не можете удалить эту дружбу
+        '404':
+          description: Дружба не найдена
+  /api/usersfriends/{id}/delete/:
+    delete:
+      operationId: usersfriends_delete_destroy_2
+      summary: Удалить пользователя из списка друзей
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - users · Friends
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '204':
+          description: Друг удалён
+        '403':
+          description: Вы не можете удалить эту дружбу
+        '404':
+          description: Дружба не найдена
+  /api/usersfriends/incoming:
+    get:
+      operationId: usersfriends_incoming_list
+      summary: Входящие запросы в друзья (статус pending)
+      tags:
+      - users · Friends
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Friendship'
+          description: ''
+  /api/usersfriends/incoming/:
+    get:
+      operationId: usersfriends_incoming_list_2
+      summary: Входящие запросы в друзья (статус pending)
+      tags:
+      - users · Friends
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Friendship'
+          description: ''
+  /api/userslogin:
+    post:
+      operationId: userslogin_create
+      summary: Авторизация (получение JWT access + refresh)
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          description: JWT токены + данные пользователя
+        '400':
+          description: Email или пароль не переданы
+        '401':
+          description: Неверный email или пароль
+        '403':
+          description: Аккаунт не активен или не подтверждён email
+  /api/userslogin/:
+    post:
+      operationId: userslogin_create_2
+      summary: Авторизация (получение JWT access + refresh)
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          description: JWT токены + данные пользователя
+        '400':
+          description: Email или пароль не переданы
+        '401':
+          description: Неверный email или пароль
+        '403':
+          description: Аккаунт не активен или не подтверждён email
+  /api/userslogout:
+    post:
+      operationId: userslogout_create
+      summary: Logout — добавление refresh в blacklist
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Выход выполнен успешно
+        '400':
+          description: Токен не передан или недействителен
+  /api/userslogout/:
+    post:
+      operationId: userslogout_create_2
+      summary: Logout — добавление refresh в blacklist
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Выход выполнен успешно
+        '400':
+          description: Токен не передан или недействителен
+  /api/usersme:
+    get:
+      operationId: usersme_retrieve
+      summary: Полный профиль текущего пользователя
+      tags:
+      - users · Profile
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+  /api/usersme/:
+    get:
+      operationId: usersme_retrieve_2
+      summary: Полный профиль текущего пользователя
+      tags:
+      - users · Profile
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+  /api/usersme/account:
+    patch:
+      operationId: usersme_account_partial_update
+      summary: Обновление email/phone/push настроек аккаунта
+      tags:
+      - users · Profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateAccountRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateAccountRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateAccountRequest'
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Аккаунт обновлён. При смене email — новый код отправлен на
+            новую почту
+        '400':
+          description: Email уже используется / ошибка валидации
+  /api/usersme/account/:
+    patch:
+      operationId: usersme_account_partial_update_2
+      summary: Обновление email/phone/push настроек аккаунта
+      tags:
+      - users · Profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateAccountRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateAccountRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateAccountRequest'
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Аккаунт обновлён. При смене email — новый код отправлен на
+            новую почту
+        '400':
+          description: Email уже используется / ошибка валидации
+  /api/usersme/languages:
+    get:
+      operationId: usersme_languages_list
+      summary: Список изучаемых языков пользователя
+      tags:
+      - users · Languages
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserLanguage'
+          description: ''
+    post:
+      operationId: usersme_languages_create
+      summary: Добавить язык в список изучаемых
+      tags:
+      - users · Languages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLanguage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserLanguage'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserLanguage'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLanguage'
+          description: ''
+        '400':
+          description: Язык уже добавлен / ошибка валидации
+  /api/usersme/languages/:
+    get:
+      operationId: usersme_languages_list_2
+      summary: Список изучаемых языков пользователя
+      tags:
+      - users · Languages
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserLanguage'
+          description: ''
+    post:
+      operationId: usersme_languages_create_2
+      summary: Добавить язык в список изучаемых
+      tags:
+      - users · Languages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLanguage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserLanguage'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserLanguage'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLanguage'
+          description: ''
+        '400':
+          description: Язык уже добавлен / ошибка валидации
+  /api/usersme/languages/{id}:
+    patch:
+      operationId: usersme_languages_partial_update
+      summary: Обновить уровень / настройку видимости уровня для языка
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - users · Languages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserLanguage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserLanguage'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserLanguage'
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLanguage'
+          description: ''
+        '400':
+          description: Ошибка валидации
+        '404':
+          description: Язык не найден
+    delete:
+      operationId: usersme_languages_destroy
+      summary: Обновить уровень / настройку видимости уровня для языка
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - users · Languages
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLanguage'
+          description: ''
+        '400':
+          description: Ошибка валидации
+        '404':
+          description: Язык не найден
+  /api/usersme/languages/{id}/:
+    patch:
+      operationId: usersme_languages_partial_update_2
+      summary: Обновить уровень / настройку видимости уровня для языка
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - users · Languages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserLanguage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserLanguage'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserLanguage'
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLanguage'
+          description: ''
+        '400':
+          description: Ошибка валидации
+        '404':
+          description: Язык не найден
+    delete:
+      operationId: usersme_languages_destroy_2
+      summary: Обновить уровень / настройку видимости уровня для языка
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - users · Languages
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLanguage'
+          description: ''
+        '400':
+          description: Ошибка валидации
+        '404':
+          description: Язык не найден
+  /api/usersme/profile:
+    patch:
+      operationId: usersme_profile_partial_update
+      summary: Редактирование профиля (ФИО, аватар, био, часовой пояс и т.д.)
+      tags:
+      - users · Profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProfile'
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: ''
+        '400':
+          description: Ошибка валидации
+  /api/usersme/profile/:
+    patch:
+      operationId: usersme_profile_partial_update_2
+      summary: Редактирование профиля (ФИО, аватар, био, часовой пояс и т.д.)
+      tags:
+      - users · Profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProfile'
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: ''
+        '400':
+          description: Ошибка валидации
+  /api/usersregister:
+    post:
+      operationId: usersregister_create
+      summary: Регистрация нового пользователя
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '201':
+          description: Регистрация успешна, код отправлен на email
+        '400':
+          description: Ошибка валидации
+  /api/usersregister/:
+    post:
+      operationId: usersregister_create_2
+      summary: Регистрация нового пользователя
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '201':
+          description: Регистрация успешна, код отправлен на email
+        '400':
+          description: Ошибка валидации
+  /api/usersresend-verification:
+    post:
+      operationId: usersresend_verification_create
+      summary: Повторная отправка кода подтверждения
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendVerificationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResendVerificationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResendVerificationRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          description: Если аккаунт существует, код будет отправлен
+        '400':
+          description: Email обязателен или аккаунт уже подтверждён
+  /api/usersresend-verification/:
+    post:
+      operationId: usersresend_verification_create_2
+      summary: Повторная отправка кода подтверждения
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendVerificationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResendVerificationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResendVerificationRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          description: Если аккаунт существует, код будет отправлен
+        '400':
+          description: Email обязателен или аккаунт уже подтверждён
+  /api/userstoken/refresh:
+    post:
+      operationId: userstoken_refresh_create
+      summary: Обновление access токена по refresh
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          description: Новая пара access + refresh токенов
+        '400':
+          description: Refresh токен обязателен
+        '401':
+          description: Токен недействителен или истёк
+  /api/userstoken/refresh/:
+    post:
+      operationId: userstoken_refresh_create_2
+      summary: Обновление access токена по refresh
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          description: Новая пара access + refresh токенов
+        '400':
+          description: Refresh токен обязателен
+        '401':
+          description: Токен недействителен или истёк
+  /api/usersverify-email:
+    post:
+      operationId: usersverify_email_create
+      summary: Подтверждение email по 6-значному коду
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailVerification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EmailVerification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EmailVerification'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          description: Email подтверждён, аккаунт активирован
+        '400':
+          description: Неверный код / код просрочен / ошибка валидации
+        '404':
+          description: Пользователь не найден
+  /api/usersverify-email/:
+    post:
+      operationId: usersverify_email_create_2
+      summary: Подтверждение email по 6-значному коду
+      tags:
+      - users · Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailVerification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EmailVerification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EmailVerification'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      - {}
+      responses:
+        '200':
+          description: Email подтверждён, аккаунт активирован
+        '400':
+          description: Неверный код / код просрочен / ошибка валидации
+        '404':
+          description: Пользователь не найден
+components:
+  schemas:
+    ActionEnum:
+      enum:
+      - accept
+      - reject
+      type: string
+      description: |-
+        * `accept` - accept
+        * `reject` - reject
+    CEFRLevel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        level:
+          $ref: '#/components/schemas/CEFRLevelLevelEnum'
+        title:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+        min_vocabulary:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        max_vocabulary:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+      required:
+      - id
+      - level
+      - title
+    CEFRLevelLevelEnum:
+      enum:
+      - A1
+      - A2
+      - B1
+      - B2
+      - C1
+      - C2
+      type: string
+      description: |-
+        * `A1` - A1 — Beginner
+        * `A2` - A2 — Elementary
+        * `B1` - B1 — Intermediate
+        * `B2` - B2 — Upper-Intermediate
+        * `C1` - C1 — Advanced
+        * `C2` - C2 — Mastery
+    ChangePasswordRequest:
+      type: object
+      properties:
+        old_password:
+          type: string
+          description: Текущий пароль
+        new_password:
+          type: string
+          description: Новый пароль (минимум 8 символов)
+      required:
+      - new_password
+      - old_password
+    DashboardRoleEnum:
+      enum:
+      - superadmin
+      - moderator
+      - analyst
+      type: string
+      description: |-
+        * `superadmin` - Superadmin
+        * `moderator` - Moderator
+        * `analyst` - Analyst
+    EmailVerification:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        code:
+          type: string
+          maxLength: 6
+          minLength: 6
+      required:
+      - code
+      - email
+    Friendship:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        from_user:
+          type: string
+          readOnly: true
+        to_user:
+          type: string
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - from_user
+      - id
+      - status
+      - to_user
+      - updated_at
+    FriendshipCreateRequest:
+      type: object
+      properties:
+        to_user:
+          type: string
+          description: Username пользователя, которому отправляем запрос
+      required:
+      - to_user
+    Language:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        native_name:
+          type: string
+          maxLength: 100
+        code:
+          type: string
+          maxLength: 10
+        flag_emoji:
+          type: string
+          maxLength: 10
+        description:
+          type: string
+        is_active:
+          type: boolean
+        story_submission_min_level:
+          type: string
+          maxLength: 2
+        cefr_levels:
+          type: array
+          items:
+            $ref: '#/components/schemas/CEFRLevel'
+          readOnly: true
+      required:
+      - cefr_levels
+      - code
+      - id
+      - name
+      - native_name
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: Email пользователя
+        password:
+          type: string
+          description: Пароль
+      required:
+      - email
+      - password
+    LogoutRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          description: Refresh JWT токен для blacklist
+      required:
+      - refresh
+    PatchedFriendshipActionRequest:
+      type: object
+      properties:
+        action:
+          allOf:
+          - $ref: '#/components/schemas/ActionEnum'
+          description: |-
+            Действие над запросом
+
+            * `accept` - accept
+            * `reject` - reject
+    PatchedLanguageToggleRequest:
+      type: object
+      properties:
+        is_active:
+          type: boolean
+          description: Если не передано — текущий флаг is_active просто инвертируется.
+            Если передано — устанавливается явно (True/False).
+    PatchedProfile:
+      type: object
+      properties:
+        full_name:
+          type: string
+          maxLength: 150
+        avatar_url:
+          type: string
+          format: uri
+          maxLength: 200
+        bio:
+          type: string
+          maxLength: 500
+        native_language:
+          type: string
+          maxLength: 10
+        timezone:
+          type: string
+          maxLength: 50
+        ui_language:
+          $ref: '#/components/schemas/UiLanguageEnum'
+        telegram_chat_id:
+          type: string
+          maxLength: 50
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedUpdateAccountRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: Новый email (требует повторной верификации)
+        phone:
+          type: string
+          description: Номер телефона
+        push_enabled:
+          type: boolean
+          description: Включить push-уведомления
+        push_token:
+          type: string
+          description: Токен для push-уведомлений (Firebase / Web Push)
+    PatchedUserLanguage:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        language_code:
+          type: string
+          maxLength: 10
+        level:
+          $ref: '#/components/schemas/UserLanguageLevelEnum'
+        show_level:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+    Profile:
+      type: object
+      properties:
+        full_name:
+          type: string
+          maxLength: 150
+        avatar_url:
+          type: string
+          format: uri
+          maxLength: 200
+        bio:
+          type: string
+          maxLength: 500
+        native_language:
+          type: string
+          maxLength: 10
+        timezone:
+          type: string
+          maxLength: 50
+        ui_language:
+          $ref: '#/components/schemas/UiLanguageEnum'
+        telegram_chat_id:
+          type: string
+          maxLength: 50
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - updated_at
+    PublicAuthorProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        username:
+          type: string
+          maxLength: 50
+        full_name:
+          type: string
+          readOnly: true
+        avatar_url:
+          type: string
+          format: uri
+          readOnly: true
+        bio:
+          type: string
+          readOnly: true
+        native_language:
+          type: string
+          readOnly: true
+        user_languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserLanguage'
+          readOnly: true
+        duel_count:
+          type: string
+          readOnly: true
+        win_count:
+          type: string
+          readOnly: true
+        achievements_count:
+          type: string
+          readOnly: true
+      required:
+      - achievements_count
+      - avatar_url
+      - bio
+      - duel_count
+      - full_name
+      - id
+      - native_language
+      - user_languages
+      - username
+      - win_count
+    ResendVerificationRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: Email для повторной отправки кода
+      required:
+      - email
+    StatusEnum:
+      enum:
+      - pending
+      - accepted
+      - rejected
+      type: string
+      description: |-
+        * `pending` - Ожидает
+        * `accepted` - Принят
+        * `rejected` - Отклонён
+    TokenRefreshRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          description: Refresh JWT токен
+      required:
+      - refresh
+    UiLanguageEnum:
+      enum:
+      - ru
+      - en
+      - tg
+      type: string
+      description: |-
+        * `ru` - Русский
+        * `en` - English
+        * `tg` - Тоҷикӣ
+    UserLanguage:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        language_code:
+          type: string
+          maxLength: 10
+        level:
+          $ref: '#/components/schemas/UserLanguageLevelEnum'
+        show_level:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - language_code
+      - level
+    UserLanguageLevelEnum:
+      enum:
+      - A1
+      - A2
+      - B1
+      - B2
+      - C1
+      - C2
+      type: string
+      description: |-
+        * `A1` - A1
+        * `A2` - A2
+        * `B1` - B1
+        * `B2` - B2
+        * `C1` - C1
+        * `C2` - C2
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        username:
+          type: string
+          maxLength: 50
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        phone:
+          type: string
+          maxLength: 20
+        is_verified:
+          type: boolean
+          readOnly: true
+        dashboard_role:
+          allOf:
+          - $ref: '#/components/schemas/DashboardRoleEnum'
+          readOnly: true
+        push_enabled:
+          type: boolean
+        push_token:
+          type: string
+        profile:
+          allOf:
+          - $ref: '#/components/schemas/Profile'
+          readOnly: true
+        user_languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserLanguage'
+          readOnly: true
+        duel_count:
+          type: string
+          readOnly: true
+        win_count:
+          type: string
+          readOnly: true
+        achievements_count:
+          type: string
+          readOnly: true
+        best_streak:
+          type: string
+          readOnly: true
+      required:
+      - achievements_count
+      - best_streak
+      - dashboard_role
+      - duel_count
+      - email
+      - id
+      - is_verified
+      - profile
+      - user_languages
+      - username
+      - win_count
+    UserRegister:
+      type: object
+      properties:
+        username:
+          type: string
+          maxLength: 50
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        phone:
+          type: string
+          maxLength: 20
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password
+      - username
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

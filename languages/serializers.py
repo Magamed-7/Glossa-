@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from .models import Language, CEFRLevel
 
 
@@ -17,10 +18,6 @@ class CEFRLevelSerializer(serializers.ModelSerializer):
 
 
 class LanguageSerializer(serializers.ModelSerializer):
-    """
-    Базовый сериализатор языка.
-    cefr_levels — вложенный список уровней, доступных для данного языка.
-    """
     cefr_levels = CEFRLevelSerializer(many=True, read_only=True)
 
     class Meta:
@@ -39,10 +36,16 @@ class LanguageSerializer(serializers.ModelSerializer):
 
 
 class LanguageShortSerializer(serializers.ModelSerializer):
-    """
-    Краткий сериализатор — используется в других app (stories, duels, learning и т.д.)
-    без вложенного списка уровней, чтобы не нагружать ответ лишними данными.
-    """
     class Meta:
         model = Language
         fields = ['id', 'name', 'native_name', 'code', 'flag_emoji']
+
+
+class LanguageToggleRequestSerializer(serializers.Serializer):
+    is_active = serializers.BooleanField(
+        required=False,
+        help_text=(
+            'Если не передано — текущий флаг is_active просто инвертируется. '
+            'Если передано — устанавливается явно (True/False).'
+        ),
+    )
