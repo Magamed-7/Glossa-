@@ -64,3 +64,14 @@ class GrammarBookmarkSerializer(serializers.ModelSerializer):
         model = GrammarBookmark
         fields = ['id', 'lesson', 'lesson_title', 'created_at']
         read_only_fields = ['id', 'created_at']
+
+
+class LessonTestSubmitSerializer(serializers.Serializer):
+    answers = serializers.DictField(
+        child=serializers.CharField(),
+        help_text='Словарь {question_id: answer}, например {"uuid-question-id": "reads"}'
+    )
+
+
+class BookmarkCreateSerializer(serializers.Serializer):
+    lesson = serializers.UUIDField(help_text='UUID урока для добавления в закладки')

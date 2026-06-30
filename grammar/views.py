@@ -1,5 +1,6 @@
 import logging
 from django.utils import timezone
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -11,6 +12,8 @@ from .serializers import (
     GrammarLessonDetailSerializer,
     UserGrammarProgressSerializer,
     GrammarBookmarkSerializer,
+    LessonTestSubmitSerializer,
+    BookmarkCreateSerializer,
 )
 
 logger = logging.getLogger('grammar')
@@ -33,6 +36,11 @@ def _has_active_pro(user):
 class LessonListView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='Список уроков грамматики',
+        description='Фильтрация по языку, уровню и тегу. Pro-пользователи видят все уроки.',
+        responses={200: GrammarLessonSerializer(many=True)},
+    )
     def get(self, request):
         qs = GrammarLesson.objects.filter(status='published').select_related('language', 'cefr_level')
 
@@ -59,6 +67,11 @@ class LessonListView(APIView):
 class LessonDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='Детали урока грамматики',
+        description='Получение урока с примерами и вопросами. Автоматически создаёт прогресс.',
+        responses={200: GrammarLessonDetailSerializer},
+    )
     def get(self, request, pk):
         try:
             lesson = GrammarLesson.objects.prefetch_related('examples', 'questions').get(id=pk, status='published')
@@ -87,13 +100,29 @@ class LessonDetailView(APIView):
 class LessonTestSubmitView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='Сдать тест урока грамматики',
+        description='Отправка ответов на вопросы теста. При 100% статус меняется на completed.',
+        request=LessonTestSubmitSerializer,
+        responses={200: {'type': 'object', 'properties': {
+            'score': {'type': 'integer'},
+            'correct_count': {'type': 'integer'},
+            'total_questions': {'type': 'integer'},
+            'status': {'type': 'string'},
+            'details': {'type': 'object'},
+        }}},
+    )
     def post(self, request, pk):
         try:
             lesson = GrammarLesson.objects.prefetch_related('questions').get(id=pk, status='published')
         except GrammarLesson.DoesNotExist:
             return Response({'detail': 'Урок не найден.'}, status=status.HTTP_404_NOT_FOUND)
 
-        answers = request.data.get('answers', {})
+        serializer = LessonTestSubmitSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        answers = serializer.validated_data['answers']
         questions = lesson.questions.all()
         total_questions = questions.count()
 
@@ -157,16 +186,28 @@ class LessonTestSubmitView(APIView):
 class GrammarBookmarkListView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='Список закладок',
+        description='Получение списка закладок текущего пользователя.',
+        responses={200: GrammarBookmarkSerializer(many=True)},
+    )
     def get(self, request):
         bookmarks = GrammarBookmark.objects.filter(user=request.user).select_related('lesson')
         serializer = GrammarBookmarkSerializer(bookmarks, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @extend_schema(
+        summary='Добавить урок в закладки',
+        description='Добавление урока в закладки по UUID.',
+        request=BookmarkCreateSerializer,
+        responses={201: GrammarBookmarkSerializer},
+    )
     def post(self, request):
-        lesson_id = request.data.get('lesson')
-        if not lesson_id:
-            return Response({'detail': 'ID урока обязателен.'}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = BookmarkCreateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+        lesson_id = serializer.validated_data['lesson']
         try:
             lesson = GrammarLesson.objects.get(id=lesson_id)
         except GrammarLesson.DoesNotExist:
@@ -185,6 +226,11 @@ class GrammarBookmarkListView(APIView):
 class GrammarBookmarkDeleteView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='Удалить закладку',
+        description='Удаление закладки по UUID.',
+        responses={204: None},
+    )
     def delete(self, request, pk):
         try:
             bookmark = GrammarBookmark.objects.get(id=pk, user=request.user)

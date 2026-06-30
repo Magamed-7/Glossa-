@@ -4,6 +4,7 @@ from datetime import timedelta
 from django.conf import settings
 from django.utils import timezone
 
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -16,6 +17,7 @@ from .serializers import (
     PaymentCreateSerializer,
     PaymentEventSerializer,
     TrialPeriodSerializer,
+    DemoPaySerializer,
 )
 
 logger = logging.getLogger('subscriptions')
@@ -27,6 +29,11 @@ TRIAL_DURATION_DAYS = 4
 class PlanListView(APIView):
     permission_classes = [AllowAny]
 
+    @extend_schema(
+        summary='Список тарифных планов',
+        description='Все активные тарифные планы.',
+        responses={200: PlanSerializer(many=True)},
+    )
     def get(self, request):
         plans = Plan.objects.filter(is_active=True)
         serializer = PlanSerializer(plans, many=True)
@@ -36,6 +43,11 @@ class PlanListView(APIView):
 class UserSubscriptionView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='Моя подписка',
+        description='Текущая подписка, триал и история платежей.',
+        responses={200: {'type': 'object'}},
+    )
     def get(self, request):
         subscription = (
             Subscription.objects
@@ -68,10 +80,15 @@ class UserSubscriptionView(APIView):
 
 
 class CreatePaymentView(APIView):
- 
     # 4. TODO
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='Создать платёж',
+        description='Создание платежа в статусе pending. Ожидается подтверждение.',
+        request=PaymentCreateSerializer,
+        responses={201: {'type': 'object'}},
+    )
     def post(self, request):
         serializer = PaymentCreateSerializer(data=request.data)
         if not serializer.is_valid():
@@ -115,6 +132,12 @@ class CreatePaymentView(APIView):
 class DemoPayView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='Демо-оплата',
+        description='Эмуляция успешной оплаты. Только для DEBUG=True.',
+        request=DemoPaySerializer,
+        responses={201: {'type': 'object'}},
+    )
     def post(self, request):
         if not getattr(settings, 'DEBUG', False):
             return Response(
@@ -122,10 +145,11 @@ class DemoPayView(APIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        plan_id = request.data.get('plan_id')
-        if not plan_id:
-            return Response({'detail': 'plan_id обязателен.'}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = DemoPaySerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+        plan_id = serializer.validated_data['plan_id']
         try:
             plan = Plan.objects.get(id=plan_id, is_active=True)
         except Plan.DoesNotExist:
@@ -180,6 +204,11 @@ class DemoPayView(APIView):
 class TrialActivationView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='Активировать пробный период',
+        description='Активация 14-дневного триала. Одноразово. Создаёт подписку на 14 дней.',
+        responses={201: {'type': 'object'}},
+    )
     def post(self, request):
         user = request.user
 

@@ -4,6 +4,7 @@ from datetime import timedelta, date
 from django.utils import timezone
 from django.db.models import Q
 
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -14,6 +15,7 @@ from .serializers import (
     StoryListSerializer,
     StoryDetailSerializer,
     StoryCreateSerializer,
+    StoryAIAssistSerializer,
 )
 
 logger = logging.getLogger('stories')
@@ -39,6 +41,11 @@ def _has_active_pro(user):
 class StoryListView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='Каталог историй',
+        description='Список опубликованных историй с фильтрацией. Free-пользователи видят только бесплатные.',
+        responses={200: StoryListSerializer(many=True)},
+    )
     def get(self, request):
         is_pro = _has_active_pro(request.user)
         if not is_pro:
@@ -91,6 +98,11 @@ class StoryListView(APIView):
 class StoryDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='Читать историю',
+        description='Получение полного текста истории со словами. Увеличивает счётчик просмотров.',
+        responses={200: StoryDetailSerializer},
+    )
     def get(self, request, pk):
         try:
             story = Story.objects.select_related(
@@ -124,6 +136,12 @@ class StoryDetailView(APIView):
 class StoryCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='Создать историю',
+        description='Создание новой истории (уровень B2+). Free-лимит: 4 в неделю. Статус: pending_review.',
+        request=StoryCreateSerializer,
+        responses={201: StoryListSerializer},
+    )
     def post(self, request):
         serializer = StoryCreateSerializer(data=request.data)
         if not serializer.is_valid():
@@ -167,6 +185,13 @@ class StoryCreateView(APIView):
 
 class StoryAIAssistView(APIView):
     # TODO
+
+    @extend_schema(
+        summary='AI помощь с историей',
+        description='Запрос AI для улучшения текста истории. Только для Pro.',
+        request=StoryAIAssistSerializer,
+        responses={200: {'type': 'object'}},
+    )
     def post(self, request, pk):
         if not _has_active_pro(request.user):
             return Response(

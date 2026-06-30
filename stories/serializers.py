@@ -123,3 +123,10 @@ class StoryCreateSerializer(serializers.ModelSerializer):
                 'Уровень CEFR должен относиться к выбранному языку.'
             )
         return data
+
+
+class StoryAIAssistSerializer(serializers.Serializer):
+    text = serializers.CharField(
+        required=False,
+        help_text='Текст для улучшения. Если не передан, используется текущий контент истории.'
+    )

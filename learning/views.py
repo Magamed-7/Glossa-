@@ -1,5 +1,6 @@
 import logging
 from django.utils import timezone
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -30,6 +31,11 @@ def _has_active_pro(user):
 class DeckListView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='Моя колода слов',
+        description='Список всех слов пользователя с фильтрацией по статусу, категории, языку.',
+        responses={200: UserPhraseSerializer(many=True)},
+    )
     def get(self, request):
         qs = UserPhrase.objects.filter(user=request.user).prefetch_related('review_sessions')
 
@@ -52,6 +58,12 @@ class DeckListView(APIView):
 class AddWordView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='Добавить слово в колоду',
+        description='Добавление нового слова. Free-лимит: 55 слов/день. Pro — безлимит.',
+        request=UserPhraseSerializer,
+        responses={201: UserPhraseSerializer},
+    )
     def post(self, request):
         is_pro = _has_active_pro(request.user)
         if not is_pro:
@@ -99,6 +111,11 @@ class AddWordView(APIView):
 class ReviewSessionView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='Слова для повторения',
+        description='Слова, у которых наступил срок повторения (next_review_at <= now).',
+        responses={200: UserPhraseSerializer(many=True)},
+    )
     def get(self, request):
         now = timezone.now()
         qs = UserPhrase.objects.filter(
@@ -118,6 +135,12 @@ class ReviewSessionView(APIView):
 class SubmitReviewView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='Отправить результат повторения',
+        description='Результат: again/hard/good/easy. Алгоритм SM-2 обновляет интервал.',
+        request=ReviewSubmitSerializer,
+        responses={200: {'type': 'object'}},
+    )
     def post(self, request, pk):
         try:
             phrase = UserPhrase.objects.get(id=pk, user=request.user)
@@ -159,6 +182,11 @@ class SubmitReviewView(APIView):
 class MasteredWordsListView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='Выученные слова',
+        description='Список слов со статусом mastered.',
+        responses={200: UserPhraseSerializer(many=True)},
+    )
     def get(self, request):
         qs = UserPhrase.objects.filter(user=request.user, status='mastered')
         serializer = UserPhraseSerializer(qs, many=True)
@@ -168,6 +196,11 @@ class MasteredWordsListView(APIView):
 class RestartWordView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='Вернуть выученное слово в колоду',
+        description='Сброс прогресса выученного слова для повторения.',
+        responses={200: {'type': 'object'}},
+    )
     def post(self, request, pk):
         try:
             phrase = UserPhrase.objects.get(id=pk, user=request.user, status='mastered')

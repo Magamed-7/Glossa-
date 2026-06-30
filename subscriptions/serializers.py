@@ -89,3 +89,16 @@ class TrialPeriodSerializer(serializers.ModelSerializer):
             'is_active',
             'created_at',
         ]
+
+
+class DemoPaySerializer(serializers.Serializer):
+    plan_id = serializers.UUIDField(help_text='UUID тарифного плана для демо-оплаты')
+
+    def validate_plan_id(self, value):
+        try:
+            plan = Plan.objects.get(id=value, is_active=True)
+        except Plan.DoesNotExist:
+            raise serializers.ValidationError('Тариф не найден или недоступен.')
+        if plan.period == 'free':
+            raise serializers.ValidationError('Нельзя "оплатить" бесплатный тариф.')
+        return value

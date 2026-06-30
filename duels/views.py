@@ -4,6 +4,7 @@ from django.db import transaction
 from django.db.models import Q
 from django.utils import timezone
 
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -176,6 +177,12 @@ def _finalize_duel(duel):
 class CreateDuelSessionView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='Создать дуэль',
+        description='Создание дуэли. Проходит через 3 стадии: language -> cefr_level -> mode.',
+        request=CreateDuelSerializer,
+        responses={201: DuelDetailSerializer},
+    )
     def post(self, request):
         serializer = CreateDuelSerializer(data=request.data)
         if not serializer.is_valid():
@@ -230,6 +237,11 @@ class CreateDuelSessionView(APIView):
 class DuelDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='Детали дуэли',
+        description='Получение полной информации о дуэли с раундами.',
+        responses={200: DuelDetailSerializer},
+    )
     def get(self, request, duel_id):
         try:
             duel = Duel.objects.prefetch_related('rounds').get(id=duel_id)
@@ -248,6 +260,12 @@ class DuelDetailView(APIView):
 class DuelWithAIView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='Дуэль с AI',
+        description='Создание и автоматическое завершение дуэли с AI-противником. Все раунды генерируются и отвечаются сразу.',
+        request=CreateDuelSerializer,
+        responses={200: {'type': 'object'}},
+    )
     def post(self, request):
         serializer = CreateDuelSerializer(data=request.data)
         if not serializer.is_valid():
@@ -303,6 +321,11 @@ class DuelWithAIView(APIView):
 class DuelHistoryView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='История дуэлей',
+        description='Список завершённых дуэлей текущего пользователя.',
+        responses={200: DuelListSerializer(many=True)},
+    )
     def get(self, request):
         duels = (
             Duel.objects.filter(status='finished')
@@ -317,6 +340,11 @@ class DuelHistoryView(APIView):
 class DuelResultView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='Результат дуэли',
+        description='Детальный результат дуэли со статистикой и рекомендациями.',
+        responses={200: DuelResultWithRecommendationSerializer},
+    )
     def get(self, request, duel_id):
         try:
             duel = Duel.objects.prefetch_related('rounds').get(id=duel_id)
