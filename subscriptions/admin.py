@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Plan, Subscription, PaymentEvent, TrialPeriod
+from django.utils import timezone
+from .models import Plan, Subscription, PaymentEvent, TrialPeriod, PaymentRequest
 
 
 @admin.register(Plan)
@@ -296,3 +297,145 @@ class TrialPeriodAdmin(admin.ModelAdmin):
     @admin.display(description="📌 Использован")
     def used_badge(self, obj):
         return "🟢 Да" if obj.is_used else "—"
+
+
+@admin.register(PaymentRequest)
+class PaymentRequestAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "user_email",
+        "plan_name",
+        "amount_badge",
+        "status_badge",
+        "created_at",
+        "confirm_button",
+    )
+
+    list_filter = (
+        "status",
+        "plan",
+    )
+
+    search_fields = (
+        "user__email",
+        "user__username",
+    )
+
+    autocomplete_fields = (
+        "user",
+        "plan",
+        "confirmed_by",
+    )
+
+    ordering = ("-created_at",)
+
+    readonly_fields = ("created_at", "confirmed_at")
+
+    fieldsets = (
+        ("👤 Запрос", {
+            "fields": (
+                "user",
+                "plan",
+                "amount",
+                "currency",
+                "status",
+            )
+        }),
+        ("✅ Подтверждение", {
+            "fields": (
+                "confirmed_by",
+                "confirmed_at",
+                "admin_note",
+            )
+        }),
+        ("📡 Система", {
+            "fields": (
+                "created_at",
+            )
+        }),
+    )
+
+    actions = ["confirm_payments", "reject_payments"]
+
+    @admin.display(description="👤 Пользователь")
+    def user_email(self, obj):
+        return obj.user.email
+
+    @admin.display(description="💳 Тариф")
+    def plan_name(self, obj):
+        return obj.plan.name
+
+    @admin.display(description="💰 Сумма")
+    def amount_badge(self, obj):
+        return format_html('<b>{} {}</b>', obj.amount, obj.currency)
+
+    @admin.display(description="📡 Статус")
+    def status_badge(self, obj):
+        colors = {
+            "pending": "#f39c12",
+            "confirmed": "#27ae60",
+            "rejected": "#e74c3c",
+        }
+        icons = {
+            "pending": "⏳",
+            "confirmed": "✅",
+            "rejected": "❌",
+        }
+        return format_html(
+            '<b style="color:{};">{} {}</b>',
+            colors.get(obj.status, "#000"),
+            icons.get(obj.status, ""),
+            obj.get_status_display()
+        )
+
+    @admin.display(description="⚡ Действие")
+    def confirm_button(self, obj):
+        if obj.status != 'pending':
+            return "—"
+        return format_html(
+            '<a href="/admin/subscriptions/paymentrequest/{}/change/" '
+            'style="color:#27ae60;font-weight:700;">Подтвердить</a>',
+            obj.id
+        )
+
+    @admin.action(description="✅ Подтвердить выбранные")
+    def confirm_payments(self, request, queryset):
+        from datetime import timedelta
+        count = 0
+        for pr in queryset.filter(status='pending'):
+            period_map = {
+                'monthly': timedelta(days=30),
+                'annual': timedelta(days=365),
+            }
+            duration = period_map.get(pr.plan.period, timedelta(days=30))
+            now = timezone.now()
+
+            subscription = Subscription.objects.create(
+                user=pr.user,
+                plan=pr.plan,
+                status='active',
+                started_at=now,
+                expires_at=now + duration,
+            )
+
+            PaymentEvent.objects.create(
+                subscription=subscription,
+                method='card',
+                amount=pr.amount,
+                currency=pr.currency,
+                status='success',
+                is_demo=False,
+            )
+
+            pr.status = 'confirmed'
+            pr.confirmed_by = request.user
+            pr.confirmed_at = now
+            pr.save()
+            count += 1
+
+        self.message_user(request, f"Подтверждено: {count} запрос(ов)")
+
+    @admin.action(description="❌ Отклонить выбранные")
+    def reject_payments(self, request, queryset):
+        count = queryset.filter(status='pending').update(status='rejected')
+        self.message_user(request, f"Отклонено: {count} запрос(ов)")

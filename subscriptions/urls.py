@@ -5,6 +5,8 @@ from .views import (
     CreatePaymentView,
     DemoPayView,
     TrialActivationView,
+    CreatePaymentRequestView,
+    MyPaymentRequestView,
 )
 
 app_name = 'subscriptions'
@@ -19,4 +21,8 @@ urlpatterns = [
     path('demo-pay/', DemoPayView.as_view(), name='demo-pay'),
 
     path('trial/activate/', TrialActivationView.as_view(), name='trial-activate'),
+
+    path('payment-request/', CreatePaymentRequestView.as_view(), name='create-payment-request'),
+
+    path('payment-request/my/', MyPaymentRequestView.as_view(), name='my-payment-request'),
 ]

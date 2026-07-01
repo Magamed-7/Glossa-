@@ -141,7 +141,7 @@ SIMPLE_JWT = {
     'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'user_id',
 }
-APPEND_SLASH = False
+APPEND_SLASH = True
 
 
 

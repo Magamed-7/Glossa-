@@ -147,3 +147,36 @@ class TrialPeriod(models.Model):
             self.expires_at is not None and
             self.expires_at > timezone.now()
         )
+
+
+
+class PaymentRequest(models.Model):
+
+    STATUS_CHOICES = [
+        ('pending', 'Ожидает'),
+        ('confirmed', 'Подтверждён'),
+        ('rejected', 'Отклонён'),
+    ]
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='payment_requests')
+    plan = models.ForeignKey(Plan, on_delete=models.PROTECT, related_name='payment_requests')
+    amount = models.DecimalField(max_digits=8, decimal_places=2)
+    currency = models.CharField(max_length=5, default='TJS')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    admin_note = models.TextField(blank=True, default='')
+    confirmed_by = models.ForeignKey(
+        'users.User', on_delete=models.SET_NULL, null=True, blank=True,
+        related_name='confirmed_payments'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    confirmed_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = 'payment_requests'
+        verbose_name = 'Запрос на оплату'
+        verbose_name_plural = 'Запросы на оплату'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'{self.user.email} — {self.plan.name} ({self.amount} {self.currency}) [{self.status}]'

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Plan, Subscription, PaymentEvent, TrialPeriod
+from .models import Plan, Subscription, PaymentEvent, TrialPeriod, PaymentRequest
 
 
 class PlanSerializer(serializers.ModelSerializer):
@@ -102,3 +102,38 @@ class DemoPaySerializer(serializers.Serializer):
         if plan.period == 'free':
             raise serializers.ValidationError('Нельзя "оплатить" бесплатный тариф.')
         return value
+
+
+class PaymentRequestCreateSerializer(serializers.Serializer):
+    plan_id = serializers.UUIDField()
+
+    def validate_plan_id(self, value):
+        try:
+            plan = Plan.objects.get(id=value, is_active=True)
+        except Plan.DoesNotExist:
+            raise serializers.ValidationError('Тариф не найден или недоступен.')
+        if plan.period == 'free':
+            raise serializers.ValidationError('Нельзя запросить оплату бесплатного тарифа.')
+        return value
+
+
+class PaymentRequestSerializer(serializers.ModelSerializer):
+    user_email = serializers.CharField(source='user.email', read_only=True)
+    plan_name = serializers.CharField(source='plan.name', read_only=True)
+
+    class Meta:
+        model = PaymentRequest
+        fields = [
+            'id',
+            'user',
+            'user_email',
+            'plan',
+            'plan_name',
+            'amount',
+            'currency',
+            'status',
+            'admin_note',
+            'created_at',
+            'confirmed_at',
+        ]
+        read_only_fields = ['id', 'user', 'status', 'admin_note', 'created_at', 'confirmed_at']
